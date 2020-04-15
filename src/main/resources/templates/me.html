@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>My data</title>
+</head>
+<body>
+    <div class = "menu">
+        <a href = "/">Main page</a>
+        <a href = "/login">Log in</a>
+        <a href = "/logout">Log out</a>
+        <a href = "/sign-up">Sign up</a>
+        <a href = "/me/delete">Delete acount</a>
+        <a href = "/me">My data</a>
+        <a href = "/users">Users</a>
+    </div>
+
+    <div class = "container" th:object = "${user}">
+
+        <div class = "entry">
+            <div class = "key">Id:</div>
+            <div class = "value" th:text = "*{getId().toString()}"></div>
+        </div>
+        <div class = "entry">
+            <div class = "key">Username:</div>
+            <div class = "value" th:text = "*{username}"></div>
+        </div>
+        <div class = "entry">
+            <div class = "key">E-mail:</div>
+            <div class = "value" th:text = "*{email}"></div>
+        </div>
+        <div class = "entry">
+            <div class = "key">Password:</div>
+            <div class = "value" th:text = "*{password}"></div>
+        </div>
+        <div class = "entry">
+            <div class = "key">Role</div>
+            <div class = "value" th:text = "*{getUserRole().name()}"></div>
+        </div>
+
+    </div>
+</body>
+</html>

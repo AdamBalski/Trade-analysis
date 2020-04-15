@@ -1,4 +1,4 @@
-package com.trade_analysis.Trade.Analysis;
+package com.trade_analysis;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

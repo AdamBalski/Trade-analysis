@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>All users</title>
+</head>
+<body>
+    <div class = "menu">
+        <a href = "/">Main page</a>
+        <a href = "/login">Log in</a>
+        <a href = "/logout">Log out</a>
+        <a href = "/sign-up">Sign up</a>
+        <a href = "/me/delete">Delete acount</a>
+        <a href = "/me">My data</a>
+        <a href = "/users">Users</a>
+    </div>
+
+    <div class = "container">
+        <tr th:each = "user: ${users}">
+            <td th:utext = "${user}"></td>  </br>
+            =======================         </br>
+        </tr>
+    </div>
+</body>
+</html>
