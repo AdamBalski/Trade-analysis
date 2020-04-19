@@ -1,6 +1,10 @@
-HELP.md
+### Executables ###
 target/
-!.mvn/wrapper/maven-wrapper.jar
+
+### Maven ###
+mvnw.cmd
+mvnw
+.mvn*
 
 ### IntelliJ IDEA ###
 .idea
@@ -8,4 +12,8 @@ target/
 *.iml
 *.ipr
 
+### Properties (credentials to database for example) ###
 src/main/resources/*.properties
+
+### Other things
+frontend-controller.png

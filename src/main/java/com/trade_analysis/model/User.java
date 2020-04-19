@@ -1,87 +1,40 @@
 package com.trade_analysis.model;
 
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Entity
-@Table(name = "Users")
+@Table(name = "customers")
 public class User {
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(name = "id")
+    @Type(type="uuid-binary")
+    @GeneratedValue
+    @Column(name = "ID", nullable = false, columnDefinition = "BINARY(64)")
     private UUID id;
 
-    @Column(name = "username")
+    @Column(name = "USERNAME", nullable = false, columnDefinition = "TINYTEXT")
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "EMAIL", nullable = false, columnDefinition = "TINYTEXT")
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "PASSWORD", nullable = false, columnDefinition = "TEXT")
     private String password;
 
-    @Column(name = "role")
     @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE", nullable = false)
     private UserRole userRole;
-
-    public User() {
-    }
-
-    public User(UUID id, String username, String email, String password, UserRole userRole) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.userRole = userRole;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
 
     public List<GrantedAuthority> getGrantedAuthorities() {
         return List.of(getUserRole().getGrantedAuthority());
@@ -94,7 +47,8 @@ public class User {
                 this.toString());
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
@@ -104,7 +58,8 @@ public class User {
                 '}';
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if(this == o) return true;
         if(!(o instanceof User)) return false;
 
@@ -117,7 +72,8 @@ public class User {
         return getUserRole() == user.getUserRole();
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
         result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);

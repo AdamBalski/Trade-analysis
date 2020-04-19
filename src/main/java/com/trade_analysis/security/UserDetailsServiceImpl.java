@@ -1,8 +1,7 @@
 package com.trade_analysis.security;
 
 import com.trade_analysis.dao.ExceptionDao;
-import com.trade_analysis.dao.UserDao;
-import com.trade_analysis.exception.UserNotFoundException;
+import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.exception.UsernameNotUniqueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.persistence.NonUniqueResultException;
+import java.util.Optional;
+
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     @Qualifier("exceptionDbDao")
@@ -18,23 +20,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     @Qualifier("userDbDao")
-    UserDao userDao;
+    UserDbDao userDbDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.trade_analysis.model.User user;
+        // It loads user, and catches errors (saves exception if NonUniqueResultException is thrown)
+        Optional<com.trade_analysis.model.User> userOptional;
 
         try {
-            user = userDao.getUserByUsername(username);
+            userOptional = userDbDao.getSingleResultByUsername(username);
+
         }
-        catch (UserNotFoundException e) {
-            throw new UsernameNotFoundException("");
-        }
-        catch (UsernameNotUniqueException e) {
+        catch (NonUniqueResultException e) {
             e.printStackTrace();
             exceptionDao.save(new UsernameNotUniqueException());
-            throw new UsernameNotFoundException("");
+            throw new UsernameNotFoundException("We have some problems. Sorry, try again later.");
         }
+
+        com.trade_analysis.model.User user =
+                userOptional
+                .orElseThrow(() -> new UsernameNotFoundException("Please, check your username"));
 
         return new User(username, user.getPassword(), user.getGrantedAuthorities());
     }

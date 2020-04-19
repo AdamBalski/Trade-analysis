@@ -1,15 +1,15 @@
 package com.trade_analysis.dao;
 
-import com.trade_analysis.exception.IdNotUniqueException;
-import com.trade_analysis.exception.UserNotFoundException;
-import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 
+import javax.persistence.NonUniqueResultException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserDao {
-    User getUserByUsername(String username) throws UserNotFoundException, UsernameNotUniqueException;
-    List<User> findAllUsers();
-    User findUserById(UUID uuid) throws UserNotFoundException, IdNotUniqueException;
+    Optional<User> getSingleResultByUsername(String username) throws NonUniqueResultException;
+    List<User> findAll();
+    Optional<User> getSingleResultById(UUID uuid) throws NonUniqueResultException;
+    boolean existsById(UUID id);
 }

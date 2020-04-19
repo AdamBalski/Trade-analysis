@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th = "http://www.thymeleaf.com">
 <head>
     <meta charset="UTF-8">
-    <title>Trade_Analysis</title>
+    <title>Trade Analysis</title>
 </head>
 <body>
     <div class = "menu">
@@ -15,6 +15,6 @@
         <a href = "/users">Users</a>
     </div>
 
-    <p th:text = "${greeting}" style = "font-size: 72px;"></p>
+    <p th:text = "${greeting == null ? 'Hello!' : greeting}" style = "font-size: 72px;">Hello!</p>
 </body>
 </html>
