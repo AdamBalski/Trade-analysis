@@ -1,43 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
 <head>
 
     <meta charset="UTF-8">
     <title th:utext = "${title}"></title>
 
+    <style>
+        .menu {
+            margin: auto;
+            margin-top: 50px;
+            background-color: goldenrod;
+            padding-left: 30px;
+            padding-right: 10px;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            width: 640px;
+        }
+        .user-data-container {
+            margin: auto;
+            margin-top: 50px;
+            background-color: coral;
+            padding-left: 30px;
+            padding-right: 10px;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            width: 640px;
+        }
+        .entry {
+            width: 600px;
+            height: 30px;
+        }
+        .key {
+            width: 100px;
+            float: left;
+        }
+        .value {
+            width: 500px;
+            float: left
+        }
+    </style>
+
 </head>
 <body>
+
     <div class = "menu">
         <a href = "/">Main page</a>
         <a href = "/login">Log in</a>
         <a href = "/logout">Log out</a>
         <a href = "/sign-up">Sign up</a>
-        <a href = "/me/delete">Delete acount</a>
+        <a href = "/me/delete">Delete account</a>
         <a href = "/me">My data</a>
         <a href = "/users">Users</a>
     </div>
 
-    <div class = "container" th:object = "${user}">
+    <div class = "user-data-container" th:object = "${user}">
 
         <div class = "entry">
             <div class = "key">Id:</div>
-            <div class = "value" th:text = "*{getId().toString()}"></div>
+            <div class = "value" th:text = "*{getId().toString()}">1a431032-ff95-4786-b68f-cfc367441dcd</div>
         </div>
         <div class = "entry">
             <div class = "key">Username:</div>
-            <div class = "value" th:text = "*{username}"></div>
+            <div class = "value" th:text = "*{username}">test</div>
         </div>
         <div class = "entry">
             <div class = "key">E-mail:</div>
-            <div class = "value" th:text = "*{email}"></div>
+            <div class = "value" th:text = "*{email}">test@test.com</div>
         </div>
         <div class = "entry">
             <div class = "key">Password:</div>
-            <div class = "value" th:text = "*{password}"></div>
+            <div class = "value" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
         </div>
         <div class = "entry">
-            <div class = "key">Role</div>
-            <div class = "value" th:text = "*{getUserRole().name()}"></div>
+            <div class = "key">Role:</div>
+            <div class = "value" th:text = "*{getUserRole().name()}">USUAL</div>
         </div>
     </div>
 

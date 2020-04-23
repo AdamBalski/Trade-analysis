@@ -2,11 +2,13 @@ package com.trade_analysis.service;
 
 import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
+import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.NonUniqueResultException;
@@ -54,5 +56,9 @@ public class UserService {
     public User findUserById(UUID id) throws NonUniqueResultException, UserNotFoundException {
         Optional<User> userOptional = userDbDao.getSingleResultById(id);
         return userOptional.orElseThrow(UserNotFoundException::new);
+    }
+
+    public void signUp(UserSignUpDto userSignUpDto) throws IllegalArgumentException, DataIntegrityViolationException {
+        userDbDao.save(User.valueOf(userSignUpDto));
     }
 }

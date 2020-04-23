@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Sign up</title>
+</head>
+<body>
+
+	<div class="content">
+		<form method="POST" th:action="@{sign-up}" th:object = "${user}">
+			<div class="entry">
+				<div class="key">Username:</div>
+				<div class="value">
+				
+					<input type="text" th:field="*{username}" minlength="4" maxlength="30" pattern="[A-Za-z0-9!@#$%^&*()_]{4,30}" required>
+				</div>
+			</div>
+			<div class="entry">
+				<div class="key">E-mail</div>
+					
+					<input type="email" th:field="*{email}" maxlength="50"required>
+				<div class="value"></div>
+			</div>
+			<div class="entry">
+				<div class="key">Password:</div>
+
+					<input type="password" th:field="*{password1}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}" required>
+				<div class="value"></div>
+			</div>
+			<div class="entry">
+				<div class="key">Confirm password:</div>
+				
+					<input type="password" th:field="*{password2}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}"	 required>
+				<div class="value"></div>
+			</div>
+
+			<input type="submit" class="formButton" value="Submit">
+		</form>
+	</div>
+
+	
+		<div class=message th:if="${message.length() != 0}">
+			============================================== </br>
+			<p th:text = ${message}>	</p>
+			============================================== </br>
+		</div>
+</body>
+</html>

@@ -1,17 +1,20 @@
 package com.trade_analysis.controller;
 
+import com.trade_analysis.dtos.UserSignUpDto;
+import com.trade_analysis.dtos_validation.UserSignUpValidationResult;
+import com.trade_analysis.dtos_validation.UserSignUpValidator;
 import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 import com.trade_analysis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.UUID;
@@ -59,6 +62,31 @@ public class UserController {
         model.addAttribute("title", title);
 
         return "user";
+    }
+
+    @PreAuthorize(value = "permitAll()")
+    @GetMapping(value = "/sign-up")
+    public String getSignUpPage(Model model) {
+        model.addAttribute("user", UserSignUpDto.empty());
+        model.addAttribute("message", "");
+        return "sign-up";
+    }
+
+    @PreAuthorize(value = "permitAll()")
+    @PostMapping(value = "/sign-up")
+    public String signUp(@ModelAttribute UserSignUpDto userSignUpDto, Model model) throws IllegalArgumentException, DataIntegrityViolationException {
+        UserSignUpValidationResult result = UserSignUpValidator.fullValidator.validate(userSignUpDto);
+
+        if(result.isSuccess()) {
+            userService.signUp(userSignUpDto);
+            return "redirect://localhost:8080/signed-up";
+        }
+        else {
+            model.addAttribute("user", userSignUpDto);
+            model.addAttribute("message", result.name());
+
+            return "sign-up";
+        }
     }
 
     private boolean isAuthenticated() {

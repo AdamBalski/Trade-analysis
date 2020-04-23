@@ -1,40 +1,49 @@
 package com.trade_analysis.model;
 
+import com.trade_analysis.dtos.UserSignUpDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import static com.trade_analysis.model.UserRole.USUAL;
+
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Entity
-@Table(name = "customers")
+@Table(name = "user", schema = "public")
 public class User {
-
     @Id
-    @Type(type="uuid-binary")
-    @GeneratedValue
-    @Column(name = "ID", nullable = false, columnDefinition = "BINARY(64)")
-    private UUID id;
+    @Column(name = "id", nullable = false, columnDefinition = "uuid")
+    private UUID id = UUID.randomUUID();
 
-    @Column(name = "USERNAME", nullable = false, columnDefinition = "TINYTEXT")
+    @Column(name = "username", nullable = false, columnDefinition = "varchar(30)")
     private String username;
 
-    @Column(name = "EMAIL", nullable = false, columnDefinition = "TINYTEXT")
+    @Column(name = "email", nullable = false, columnDefinition = "varchar(90)")
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "password", nullable = false, columnDefinition = "text")
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE", nullable = false)
+    @Column(name = "user_role", nullable = false, columnDefinition = "varchar(15)")
     private UserRole userRole;
+
+    public static User valueOf(UserSignUpDto userSignUpDto) {
+        String password = new BCryptPasswordEncoder(10).encode(userSignUpDto.getPassword1());
+
+        return new User(UUID.randomUUID(),
+                userSignUpDto.getUsername(),
+                userSignUpDto.getEmail(),
+                password,
+                USUAL);
+    }
 
     public List<GrantedAuthority> getGrantedAuthorities() {
         return List.of(getUserRole().getGrantedAuthority());
