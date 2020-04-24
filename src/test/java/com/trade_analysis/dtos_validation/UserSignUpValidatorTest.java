@@ -14,7 +14,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserSignUpValidatorTest {
     @ParameterizedTest
     @CsvSource({
-            "'usernam&*)*(e', SUCCESS",
+            "'w3 r2'3 3 sx', 'e@mail.com', 'password', 'password', USERNAME_WRONG",
+            "'username', 'e@mail.com', 'password1', 'password', PASSWORDS_DIFFERENT",
+            "'wr<>ng username', 'e@mail.com', '//////', '//////', USERNAME_WRONG",
+            "'//', 'e@mail.com', 'is all wrong?', 'or is not?', USERNAME_WRONG",
+            "'username', 'e@mail.com', 'PASSWORD', 'PASSWORD', SUCCESS"
+    })
+    public void should_validate_whole_user(String username, String email, String password1, String password2) {
+        UserSignUpDto userSignUpDto = UserSignUpDto.builder()
+                .username(username)
+                .email(email)
+                .password1(password1)
+                .password2(password2)
+                .build();
+
+        UserSignUpValidator.fullValidator.validate(userSignUpDto);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'user9nam&*)*(e', SUCCESS",
             "'user'.', USERNAME_NOT_CORRECT",
             "'sh', USERNAME_NOT_CORRECT",
             "'to_long_test_case_0000000000000', USERNAME_NOT_CORRECT",
@@ -34,9 +53,9 @@ class UserSignUpValidatorTest {
     @CsvSource(
             emptyValue = "",
             value = {
-                    "'','',SUCCESS",
-                    "username,username,SUCCESS",
-                    "THOSE_PASSWORDS,ARE_DIFFERENT,PASSWORDS_DIFFERENT"
+                    "'', '', SUCCESS",
+                    "'username', 'username', SUCCESS",
+                    "'THOSE_PASSWORDS', 'ARE_DIFFERENT', PASSWORDS_DIFFERENT"
             })
     public void should_validate_that_password1_equals_password2(String password1, String password2, UserSignUpValidationResult expectedValidationResult) {
         UserSignUpDto userSignUpDto = UserSignUpDto.builder().
