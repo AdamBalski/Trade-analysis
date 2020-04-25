@@ -27,7 +27,7 @@ public class UserService {
     @Qualifier("userDbDao")
     UserDbDao userDbDao;
 
-    public User getUserByUsername(String username) throws UserNotFoundException, UsernameNotUniqueException {
+    public User getUserByUsername(String username) throws UserNotFoundException {
         Optional<User> userOptional;
 
         try {

@@ -58,13 +58,19 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", userRole=" + userRole +
-                '}';
+        return new StringBuilder()
+                .append("User{id='")
+                .append(id.toString())
+                .append("',username='")
+                .append(username)
+                .append("',email='")
+                .append(email)
+                .append("',password='")
+                .append(password)
+                .append("',userRole='")
+                .append(userRole.name())
+                .append("'}")
+                .toString();
     }
 
     @Override

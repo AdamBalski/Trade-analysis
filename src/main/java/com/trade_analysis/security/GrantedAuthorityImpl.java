@@ -13,4 +13,13 @@ public class GrantedAuthorityImpl implements GrantedAuthority {
     @Override public String getAuthority() {
         return "ROLE_" + userRole.name();
     }
+
+    @Override public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof GrantedAuthorityImpl)) return false;
+
+        GrantedAuthorityImpl that = (GrantedAuthorityImpl) o;
+
+        return userRole == that.userRole;
+    }
 }

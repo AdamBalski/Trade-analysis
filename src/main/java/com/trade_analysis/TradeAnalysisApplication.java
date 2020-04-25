@@ -1,16 +1,9 @@
 package com.trade_analysis;
 
 import com.trade_analysis.dao.UserDbDao;
-import com.trade_analysis.dtos.UserSignUpDto;
-import com.trade_analysis.dtos_validation.UserSignUpValidator;
-import com.trade_analysis.model.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.dao.DataIntegrityViolationException;
-
-import java.util.Scanner;
-import java.util.concurrent.Semaphore;
 
 @SpringBootApplication
 public class TradeAnalysisApplication {

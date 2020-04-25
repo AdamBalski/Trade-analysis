@@ -1,15 +1,10 @@
 package com.trade_analysis.dtos_validation;
 
 import com.trade_analysis.dtos.UserSignUpDto;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Value;
 
-import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserSignUpValidatorTest {
     @ParameterizedTest
@@ -51,7 +46,6 @@ class UserSignUpValidatorTest {
 
     @ParameterizedTest
     @CsvSource(
-            emptyValue = "",
             value = {
                     "'', '', SUCCESS",
                     "'username', 'username', SUCCESS",
@@ -70,7 +64,7 @@ class UserSignUpValidatorTest {
     }
 
     @ParameterizedTest
-    @CsvSource(emptyValue = "",
+    @CsvSource(
             value = {
                     "'',PASSWORD_NOT_CORRECT",
                     "'password', SUCCESS",
