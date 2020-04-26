@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ class UserTest {
     }
 
     @Test
-    public void should_return_valid_to_string() {
+    public void testToString() {
         String expected = "User{id='1a0c1f7e-9b6d-44cd-80c2-bb166f29f082',username='username5',email='username5@email.com'," +
                 "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN'}";
 
@@ -49,7 +50,7 @@ class UserTest {
     }
 
     @Test
-    public void should_return_link() {
+    public void testGetLink() {
         assertEquals("<a href = '/user/1a0c1f7e-9b6d-44cd-80c2-bb166f29f082' >User{id='1a0c1f7e-9b6d-44cd-80c2-bb166f29f082'," +
                 "username='username5',email='username5@email.com'," +
                 "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN'}</a>",
@@ -57,12 +58,12 @@ class UserTest {
     }
 
     @Test
-    public void should_return_granted_authorities() {
+    public void testGetGrantedAuthorities() {
         assertEquals(List.of(new GrantedAuthorityImpl(USUAL)), users.get(0).getGrantedAuthorities());
     }
 
     @Test
-    public void should_return_value_of_dto() {
+    public void testValueOfDto() {
         User user = User.valueOf(UserSignUpDto
                 .builder()
                 .username("username")
@@ -79,19 +80,19 @@ class UserTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "0, 1",
             "0, 0",
+            "0, 1",
             "3, 4"
     })
-    public void should_return_the_same_hash_code_if_they_are_equals(int a, int b) {
+    public void testHashCodeIsIdenticalIfUsersAre(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
         int firstHashCode = first.hashCode();
         int secondHashCode = second.hashCode();
-        boolean equals = first.equals(second);
 
-        if(equals) {
+        // Check 'users' list to understand 'a + b >= 4'
+        if(a == b || a + b >= 4) {
             assertEquals(firstHashCode, secondHashCode);
         }
     }
@@ -102,16 +103,15 @@ class UserTest {
             "0, 1",
             "3, 4"
     })
-    public void should_return_true_equals_and_the_same_hashcode_if_they_are_the_same(int a, int b) {
+    public void testEqualsReturnsTrueIfUsersAreIdentical(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
-        int firstHashCode = first.hashCode();
-        int secondHashCode = second.hashCode();
         boolean equals = first.equals(second);
 
+        // Check 'users' list to understand 'a + b >= 4'
         if(a == b || a + b >= 4) {
-            assertEquals(firstHashCode, secondHashCode);
+            assertTrue(equals);
         }
         else {
             assertFalse(equals);
@@ -126,7 +126,7 @@ class UserTest {
             "2, 3, 0",
             "0, 1, 2"
     })
-    public void should_return_transitive_equals(int a, int b, int c) {
+    public void testEqualsIsTransitive(int a, int b, int c) {
         User first = users.get(a);
         User second = users.get(b);
         User third = users.get(c);
@@ -144,7 +144,7 @@ class UserTest {
             "0, 1",
             "3, 4"
     })
-    public void should_return_symmetric_equals(int a, int b) {
+    public void testEqualsIsSymmetric(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
@@ -152,17 +152,17 @@ class UserTest {
     }
 
     @Test
-    public void should_return_reflexive_equals() {
+    public void testEqualsIsReflexive() {
         assertEquals(users.get(0), users.get(0));
     }
 
     @Test
-    public void should_return_false_when_passing_null_to_equals() {
+    public void testEqualsWithNull() {
         assertFalse(users.get(0).equals(null));
     }
 
     @Test
-    public void should_return_false_when_passing_object_of_another_class_to_equals() {
-        assertFalse(users.get(0).equals(new Object()));
+    public void testEqualsWithNotUser() {
+        assertFalse(users.get(0).equals(new ArrayList<>()));
     }
 }

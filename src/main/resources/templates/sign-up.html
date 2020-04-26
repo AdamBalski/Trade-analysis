@@ -2,47 +2,84 @@
 <html lang="en" xmlns:th = "http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Sign up</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="canonical" crossorigin="anonymous"/>
+	<style>
+		.value {
+			max-width: 100%;
+			align:center;
+			clear: both;
+		}
+		.entry {
+			width: 78%;
+			align: center;
+			margin: 0 auto;
+		}
+		body {
+			padding-top: 2%;
+			background-color: #eee;
+		}
+		label {
+			float:left;
+			margin-left: 10px;
+			font-size: 19px;
+			margin-top: 10px;
+			margin-bottom: 2px;
+		}
+		.key {
+			visibility: hidden;
+		}
+		.btn {
+			margin-top: 10px;
+		}
+	</style>
 </head>
-<body>
+<body class="text-center">
 
-	<div class="content">
-		<form method="POST" th:action="@{sign-up}" th:object = "${user}">
+	<div class="container">
+		<form method="POST" th:action="@{sign-up}" th:object = "${user}" class="form-signin">
+			<h2 class="form-signin-heading">Please sign up</h2>
 			<div class="entry">
-				<div class="key">Username:</div>
-				<div class="value">
+				<label>Username</label>
+				<div class="value" id="username">
 				
-					<input type="text" th:field="*{username}" minlength="4" maxlength="30" pattern="[A-Za-z0-9!@#$%^&*()_]{4,30}" required>
+					<input type="text" class="form-control" placeholder="Username" th:field="*{username}" minlength="4" maxlength="30" pattern="[A-Za-z0-9!@#$%^&*()_]{4,30}" required>
 				</div>
 			</div>
 			<div class="entry">
-				<div class="key">E-mail</div>
+				<label>E-mail</label>
 					
-					<input type="email" th:field="*{email}" maxlength="50"required>
-				<div class="value"></div>
+				<div class="value">
+					<input type="email" class="form-control" placeholder="E-mail" th:field="*{email}" maxlength="50"required>
+				</div>
 			</div>
 			<div class="entry">
-				<div class="key">Password:</div>
+				<label>Password</label>
 
-					<input type="password" th:field="*{password1}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}" required>
-				<div class="value"></div>
+				<div class="value">
+					<input type="password" class="form-control" placeholder="Password" th:field="*{password1}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}" required>
+				</div>
 			</div>
 			<div class="entry">
-				<div class="key">Confirm password:</div>
+				<label>Confirm password</label>
 				
-					<input type="password" th:field="*{password2}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}"	 required>
-				<div class="value"></div>
+				<div class="value">
+					<input type="password" class="form-control" placeholder="Password" th:field="*{password2}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}"	 required>
+				</div>
 			</div>
 
-			<input type="submit" class="formButton" value="Submit">
+			<input type="submit" class="btn btn-primary" value="Submit">
 		</form>
 	</div>
 
 	
-		<div class=message th:if="${message.length() != 0}">
-			============================================== </br>
-			<p th:text = ${message}>	</p>
-			============================================== </br>
+		<div class=message th:if="${message.length() != 0}" style="margin-top: 30px;">
+			<label th:text="${message}"></label>
 		</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

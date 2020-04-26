@@ -1,13 +1,30 @@
+.container {
+    border: solid 1px BLACK;
+    border-radius: 20px;
+    min-width: 500px;
+    max-width: 600px;
+    background-color: rgba(255, 255, 255, 0.8);
+    height: 700px;
+    align: center;
+    padding: 30px;
+}
 .entry {
-    he
+    height: 30px;
+    width: 400px;
+    clear: both;
 }
 .key {
-    height: 30;
-    width: 100;
+    width: 100px;
     float: left;
 }
 .value {
-    height: 30;
-    width: 100;
-    float: left
+    width: 300px;
+    float: left;
+}
+.break {
+    height: 50px;
+}
+.page {
+    width: 1000px;
+    margin: 0 auto;
 }

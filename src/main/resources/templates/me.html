@@ -3,42 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>My data</title>
+    <link rel = "stylesheet" href = "css/data_style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-    <div class = "menu">
-        <a href = "/">Main page</a>
-        <a href = "/login">Log in</a>
-        <a href = "/logout">Log out</a>
-        <a href = "/sign-up">Sign up</a>
-        <a href = "/me/delete">Delete acount</a>
-        <a href = "/me">My data</a>
-        <a href = "/users">Users</a>
+    <div class = "page">
+        <div class = "menu">
+            <a href = "/">Main page</a>
+            <a href = "/login">Log in</a>
+            <a href = "/logout">Log out</a>
+            <a href = "/sign-up">Sign up</a>
+            <a href = "/me/delete">Delete acount</a>
+            <a href = "/me">My data</a>
+            <a href = "/users">Users</a>
 
-    </div>
-
-    <div class = "container" th:object = "${user}">
-
-        <div class = "entry">
-            <div class = "key">Id:</div>
-            <div class = "value" th:text = "*{getId().toString()}"></div>
-        </div>
-        <div class = "entry">
-            <div class = "key">Username:</div>
-            <div class = "value" th:text = "*{username}"></div>
-        </div>
-        <div class = "entry">
-            <div class = "key">E-mail:</div>
-            <div class = "value" th:text = "*{email}"></div>
-        </div>
-        <div class = "entry">
-            <div class = "key">Password:</div>
-            <div class = "value" th:text = "*{password}"></div>
-        </div>
-        <div class = "entry">
-            <div class = "key">Role</div>
-            <div class = "value" th:text = "*{getUserRole().name()}"></div>
         </div>
 
+        <div class = "break"></div>
+
+        <div class = "container" th:object = "${user}">
+
+            <div class = "entry">
+                <div class = "key">Id:</div>
+                <div class = "value" th:text = "*{getId().toString()}">f98c3a09-e773-4b8c-9ea3-c32ca4aa9ff5</div>
+            </div>
+            <div class = "entry">
+                <div class = "key">Username:</div>
+                <div class = "value" th:text = "*{username}">username</div>
+            </div>
+            <div class = "entry">
+                <div class = "key">E-mail:</div>
+                <div class = "value" th:text = "*{email}">email@email.com</div>
+            </div>
+            <div class = "entry">
+                <div class = "key">Password:</div>
+                <div class = "value" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
+            </div>
+            <div class = "entry">
+                <div class = "key">Role</div>
+                <div class = "value" th:text = "*{getUserRole().name()}">USUAL</div>
+            </div>
+
+        </div>
     </div>
 </body>
 </html>

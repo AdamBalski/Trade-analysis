@@ -1,12 +1,18 @@
 package com.trade_analysis.dtos_validation;
 
+import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.trade_analysis.dtos_validation.UserSignUpValidationResult.*;
 
+/**
+ * Fields of this interface validate UserSignUpDto for correctness, but
+ * don't check if it is unique in the database
+ */
 public interface UserSignUpValidator extends Validator<UserSignUpDto, UserSignUpValidationResult> {
     Pattern usernamePattern = Pattern.compile("[A-Za-z0-9!@#$%^&*()_]{4,30}");
     Pattern passwordPattern = Pattern.compile("[A-Za-z0-9!@#$%^&*()_]{8,50}");
@@ -24,6 +30,8 @@ public interface UserSignUpValidator extends Validator<UserSignUpDto, UserSignUp
         return matcher.matches() ?
                 SUCCESS : USERNAME_NOT_CORRECT;
     };
+
+
     UserSignUpValidator passwordValidator = userSignUpDto -> {
         Matcher matcher = passwordPattern.matcher(userSignUpDto.getPassword1());
 
