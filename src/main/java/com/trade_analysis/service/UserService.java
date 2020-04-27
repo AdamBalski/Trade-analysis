@@ -58,7 +58,7 @@ public class UserService {
         return userOptional.orElseThrow(UserNotFoundException::new);
     }
 
-    public void signUp(UserSignUpDto userSignUpDto) throws IllegalArgumentException, DataIntegrityViolationException {
+    public void signUp(UserSignUpDto userSignUpDto) throws DataIntegrityViolationException {
         userDbDao.save(User.valueOf(userSignUpDto));
     }
 }
