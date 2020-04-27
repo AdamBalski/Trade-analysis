@@ -3,7 +3,7 @@ package com.trade_analysis.security;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ApplicationSecurityConfigurationTest {
 

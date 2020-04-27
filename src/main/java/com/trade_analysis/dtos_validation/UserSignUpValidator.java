@@ -1,8 +1,6 @@
 package com.trade_analysis.dtos_validation;
 
-import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

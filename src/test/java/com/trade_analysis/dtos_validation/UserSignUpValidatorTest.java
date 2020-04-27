@@ -69,7 +69,7 @@ class UserSignUpValidatorTest {
             value = {
                     "'',PASSWORD_NOT_CORRECT",
                     "'password', SUCCESS",
-                    "'', PASSWORD_NOT_CORRECT",
+                    "'(*&><:?>?:<(*QE)*HSAS', PASSWORD_NOT_CORRECT",
                     "'short', PASSWORD_NOT_CORRECT",
                     "'too_long_test_case_000000000000000000000000000000000', PASSWORD_NOT_CORRECT"
             })

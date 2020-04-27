@@ -4,9 +4,7 @@ public enum UserSignUpValidationResult implements ValidationResult {
     SUCCESS("SUCCESS"),
     USERNAME_NOT_CORRECT("USERNAME_NOT_CORRECT"),
     PASSWORD_NOT_CORRECT("PASSWORD_NOT_CORRECT"),
-    PASSWORDS_DIFFERENT("PASSWORDS_DIFFERENT"),
-    // OTHER ERRORS
-    ;
+    PASSWORDS_DIFFERENT("PASSWORDS_DIFFERENT");
 
     String stringRepresentation;
 
@@ -14,7 +12,8 @@ public enum UserSignUpValidationResult implements ValidationResult {
         this.stringRepresentation = stringRepresentation;
     }
 
-    @Override public boolean isSuccess() {
+    @Override
+    public boolean isSuccess() {
         return this == SUCCESS;
     }
 
