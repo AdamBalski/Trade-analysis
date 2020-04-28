@@ -9,5 +9,8 @@ Template for that file:
 ```
 spring.datasource.url = YOUR_DATABASE_URL
 spring.datasource.username = YOUR_DATABASE_USERNAME
-spring.datasource.password = YOUR_DATABASE_PASSWORD_IF_YOU_HAVE
+spring.datasource.password = YOUR_DATABASE_PASSWORD_IF_YOU_HAVE_ONE
+spring.datasource.hostname=YOUR_DATABASE_HOSTNAME
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL10Dialect
+spring.jpa.properties.hibernate.hbm2ddl.auto=validate
 ```
