@@ -25,8 +25,7 @@ import static com.trade_analysis.model.UserRole.USUAL;
 import static java.util.List.of;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
     @InjectMocks
@@ -58,7 +57,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByUsername() {
+    void testGetUserByUsername() {
         User user = users.get(0);
         String username = user.getUsername();
 
@@ -69,6 +68,8 @@ public class UserServiceTest {
         } catch (UserNotFoundException e) {
             fail("testGetUserByUsername failed. UserNotFoundException was thrown although mock object returns 'full' optional.");
         }
+
+        verify(exceptionDao, never()).save(any(Exception.class));
     }
 
     @Test
@@ -80,6 +81,7 @@ public class UserServiceTest {
 
         Executable executable = () -> userService.getUserByUsername(username);
         assertThrows(UsernameNotFoundException.class, executable);
+
         verify(exceptionDao).save(any(UsernameNotUniqueException.class));
     }
 
@@ -92,10 +94,12 @@ public class UserServiceTest {
 
         Executable executable = () -> userService.getUserByUsername(username);
         assertThrows(UserNotFoundException.class, executable);
+
+        verify(exceptionDao, never()).save(any(Exception.class));
     }
 
     @Test
-    public void testGetAllUsersWhenThereIsNoUser() {
+    void testGetAllUsersWhenThereIsNoUser() {
         assertEquals(of(), userService.getAllUsers());
     }
 
@@ -173,9 +177,8 @@ public class UserServiceTest {
     void testSignUpWhenPassingDuplicate() {
         when(userDbDao.save(any(User.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        Executable signUpExecutable = () -> {
-            UserSignUpDto dto = new UserSignUpDto("username", "email@email.com", "password1", "password2");
-            userService.signUp(dto);
+        Executable signUpExecutable = () -> { ;
+            userService.signUp(userSignUpDto);
         };
 
         assertThrows(DataIntegrityViolationException.class, signUpExecutable);
