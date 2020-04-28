@@ -4,16 +4,16 @@ import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.exception.UserNotFoundException;
+import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.verification.VerificationMode;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.List;
@@ -25,7 +25,8 @@ import static com.trade_analysis.model.UserRole.USUAL;
 import static java.util.List.of;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
     @InjectMocks
@@ -58,7 +59,39 @@ public class UserServiceTest {
 
     @Test
     public void testGetUserByUsername() {
-        // TODO
+        User user = users.get(0);
+        String username = user.getUsername();
+
+        when(userDbDao.getSingleResultByUsername(username)).thenReturn(Optional.of(user));
+
+        try {
+            assertEquals(user, userService.getUserByUsername(username));
+        } catch (UserNotFoundException e) {
+            fail("testGetUserByUsername failed. UserNotFoundException was thrown although mock object returns 'full' optional.");
+        }
+    }
+
+    @Test
+    void testGetUserByUsernameWhenOccursMoreThanOnce() {
+        User user = users.get(0);
+        String username = user.getUsername();
+
+        when(userDbDao.getSingleResultByUsername(username)).thenThrow(new NonUniqueResultException(""));
+
+        Executable executable = () -> userService.getUserByUsername(username);
+        assertThrows(UsernameNotFoundException.class, executable);
+        verify(exceptionDao).save(any(UsernameNotUniqueException.class));
+    }
+
+    @Test
+    void testFindUserByUsernameWhenUserDoesNotExist() {
+        User user = users.get(0);
+        String username = user.getUsername();
+
+        when(userDbDao.getSingleResultByUsername(username)).thenReturn(Optional.empty());
+
+        Executable executable = () -> userService.getUserByUsername(username);
+        assertThrows(UserNotFoundException.class, executable);
     }
 
     @Test
@@ -97,17 +130,19 @@ public class UserServiceTest {
     @Test
     void testFindUserById() {
         User user = users.get(0);
-        when(userDbDao.getSingleResultById(user.getId())).thenReturn(Optional.of(user));
+        UUID id = user.getId();
+
+        when(userDbDao.getSingleResultById(id)).thenReturn(Optional.of(user));
 
         try {
-            assertEquals(user, userService.findUserById(user.getId()));
+            assertEquals(user, userService.findUserById(id));
         } catch (UserNotFoundException e) {
             fail("testFindUserById failed. UserNotFoundException was thrown although mock object returns 'full' optional.");
         }
     }
 
     @Test
-    void testFindUserByIdWhenUserIsNotUnique() {
+    void testFindUserByIdWhenOccursMoreThanOnce() {
         User user = users.get(0);
         UUID id = user.getId();
 
