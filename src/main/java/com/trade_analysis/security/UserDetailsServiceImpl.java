@@ -1,8 +1,8 @@
 package com.trade_analysis.security;
 
-import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.exception.UsernameNotUniqueException;
+import com.trade_analysis.logs.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    @Qualifier("exceptionDbDao")
-    ExceptionDao exceptionDao;
+    @Qualifier("slf4jLogger")
+    Logger logger;
 
     @Autowired
     @Qualifier("userDbDao")
@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         catch (NonUniqueResultException e) {
             e.printStackTrace();
-            exceptionDao.save(new UsernameNotUniqueException());
+            logger.save(UserDetailsServiceImpl.class, new UsernameNotUniqueException());
             throw new UsernameNotFoundException("We have some problems. Sorry, try again later.");
         }
 

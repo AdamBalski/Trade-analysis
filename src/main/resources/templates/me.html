@@ -3,48 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>My data</title>
-    <link rel = "stylesheet" href = "css/data_style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-<body>
-    <div class = "page">
-        <div class = "menu">
-            <a href = "/">Main page</a>
-            <a href = "/login">Log in</a>
-            <a href = "/logout">Log out</a>
-            <a href = "/sign-up">Sign up</a>
-            <a href = "/me/delete">Delete acount</a>
-            <a href = "/me">My data</a>
-            <a href = "/users">Users</a>
+    <link rel ="stylesheet" href="../static/css/navbar.css">
+    <link rel ="stylesheet" href="../static/css/main.css"></head>
+    <link rel = "stylesheet" href = "css/data_style.css">
+<body class="container-fluid">
 
-        </div>
+    <nav class="row navbar navbar-toggler navbar-dark bg-dark">
+        <a class = "col-4 col-sm-2 col-md-1" href = "/">Main page</a>
+        <a class = "col-4 col-sm-2 col-md-1" href = "/login">Log in</a>
+        <a class = "col-4 col-sm-2 col-md-1" href = "/logout">Log out</a>
+        <a class = "col-4 col-sm-2 col-md-1" href = "/sign-up">Sign up</a>
+        <a class = "col-4 col-sm-2 col-md-1" href = "/me">My data</a>
+        <a class = "col-4 col-sm-2 col-md-1" href = "/users">Users</a>
+    </nav>
 
-        <div class = "break"></div>
-
-        <div class = "container" th:object = "${user}">
-
-            <div class = "entry">
-                <div class = "key">Id:</div>
-                <div class = "value" th:text = "*{getId().toString()}">f98c3a09-e773-4b8c-9ea3-c32ca4aa9ff5</div>
-            </div>
-            <div class = "entry">
-                <div class = "key">Username:</div>
-                <div class = "value" th:text = "*{username}">username</div>
-            </div>
-            <div class = "entry">
-                <div class = "key">E-mail:</div>
-                <div class = "value" th:text = "*{email}">email@email.com</div>
-            </div>
-            <div class = "entry">
-                <div class = "key">Password:</div>
-                <div class = "value" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
-            </div>
-            <div class = "entry">
-                <div class = "key">Role</div>
-                <div class = "value" th:text = "*{getUserRole().name()}">USUAL</div>
-            </div>
-
-        </div>
+    <div class="container">
+        <label class="h1 col-9" style="font-size: 72px;">Your data</label>
     </div>
+
+    <div class = "data container" th:object = "${user}">
+
+        <div class = "row entry col-9">
+            <label class = "font-weight-bolder key col-6 col-md-2">Id:</label>
+            <div class = "font-italic value col-7" th:text = "*{getId().toString()}">f98c3a09-e773-4 col-sm-3 md-col-12b8c-9ea3-c32ca4aa9ff5</div>
+        </div>
+        <div class = "row entry col-9">
+            <label class = "font-weight-bolder key col-6 col-md-2">Username:</label>
+            <div class = "font-italic value col-7" th:text = "*{username}">username</div>
+        </div>
+        <div class = "row entry col-9">
+            <label class = "font-weight-bolder key col-6 col-md-2">E-mail:</label>
+            <div class = "font-italic value col-7" th:text = "*{email}">email@email.com</div>
+        </div>
+        <div class = "row entry col-9">
+            <label class = "font-weight-bolder key col-6 col-md-2">Password:</label>
+            <div class = "font-italic value col-7" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
+        </div>
+        <div class = "row entry col-9">
+            <label class = "font-weight-bolder key col-6 col-md-2">Role</label>
+            <div class = "font-italic value col-7" th:text = "*{getUserRole().name()}">USUAL</div>
+        </div>
+
+    <div style="height: 10px;"></div>
+    <div class="row col-12">
+        <label class="h1 col-12" style="font-size: 72px;">Your settings</label>
+    </div>
+
+    <div  class="settings col-12">
+        <a class="row" href="/delete">Delete your account (be sure when it delete, you won't be able to restore it)</a>
+    </div>
+
 </body>
 </html>

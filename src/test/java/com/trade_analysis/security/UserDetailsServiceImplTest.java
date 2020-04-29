@@ -1,11 +1,9 @@
 package com.trade_analysis.security;
 
-import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.exception.UsernameNotUniqueException;
+import com.trade_analysis.logs.Logger;
 import com.trade_analysis.model.User;
-import com.trade_analysis.service.UserService;
-import org.hibernate.loader.plan.exec.internal.FetchStats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -22,7 +20,8 @@ import java.util.UUID;
 import static com.trade_analysis.model.UserRole.ADMIN;
 import static com.trade_analysis.model.UserRole.USUAL;
 import static java.util.List.of;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +30,7 @@ class UserDetailsServiceImplTest {
     UserDetailsServiceImpl userDetailsService;
 
     @Mock
-    ExceptionDao exceptionDao;
+    Logger logger;
     @Mock
     UserDbDao userDbDao;
 
@@ -67,7 +66,7 @@ class UserDetailsServiceImplTest {
 
         assertEquals(expected, userDetailsService.loadUserByUsername(username));
 
-        verify(exceptionDao, never()).save(any(Exception.class));
+        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -80,7 +79,7 @@ class UserDetailsServiceImplTest {
         Executable loadUserByUsernameExecutable = () -> userDetailsService.loadUserByUsername(username);
         assertThrows(UsernameNotFoundException.class, loadUserByUsernameExecutable);
 
-        verify(exceptionDao, never()).save(any(Exception.class));
+        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -94,6 +93,6 @@ class UserDetailsServiceImplTest {
         Executable loadUserByUsernameExecutable = () -> userDetailsService.loadUserByUsername(username);
         assertThrows(UsernameNotFoundException.class, loadUserByUsernameExecutable);
 
-        verify(exceptionDao).save(any(UsernameNotUniqueException.class));
+        verify(logger).save(eq(UserDetailsServiceImpl.class), any(UsernameNotUniqueException.class));
     }
 }

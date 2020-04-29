@@ -1,10 +1,9 @@
 package com.trade_analysis.service;
 
-import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.exception.UserNotFoundException;
-import com.trade_analysis.exception.UsernameNotUniqueException;
+import com.trade_analysis.logs.Logger;
 import com.trade_analysis.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ public class UserServiceTest {
     UserService userService;
 
     @Mock
-    ExceptionDao exceptionDao;
+    Logger logger;
     @Mock
     UserDbDao userDbDao;
 
@@ -69,7 +68,7 @@ public class UserServiceTest {
             fail("testGetUserByUsername failed. UserNotFoundException was thrown although mock object returns 'full' optional.");
         }
 
-        verify(exceptionDao, never()).save(any(Exception.class));
+        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class UserServiceTest {
         Executable executable = () -> userService.getUserByUsername(username);
         assertThrows(UsernameNotFoundException.class, executable);
 
-        verify(exceptionDao).save(any(UsernameNotUniqueException.class));
+        verify(logger).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -95,7 +94,7 @@ public class UserServiceTest {
         Executable executable = () -> userService.getUserByUsername(username);
         assertThrows(UserNotFoundException.class, executable);
 
-        verify(exceptionDao, never()).save(any(Exception.class));
+        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -177,7 +176,7 @@ public class UserServiceTest {
     void testSignUpWhenPassingDuplicate() {
         when(userDbDao.save(any(User.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        Executable signUpExecutable = () -> { ;
+        Executable signUpExecutable = () -> {
             userService.signUp(userSignUpDto);
         };
 

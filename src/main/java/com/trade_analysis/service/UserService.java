@@ -1,10 +1,10 @@
 package com.trade_analysis.service;
 
-import com.trade_analysis.dao.ExceptionDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.exception.UsernameNotUniqueException;
+import com.trade_analysis.logs.Logger;
 import com.trade_analysis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class UserService {
     @Autowired
-    @Qualifier("exceptionDbDao")
-    ExceptionDao exceptionDao;
+    @Qualifier("slf4jLogger")
+    Logger logger;
 
     @Autowired
     @Qualifier("userDbDao")
@@ -35,7 +35,7 @@ public class UserService {
         }
         catch (NonUniqueResultException e) {
             e.printStackTrace();
-            exceptionDao.save(new UsernameNotUniqueException());
+            logger.save(UserService.class, new UsernameNotUniqueException());
             throw new UsernameNotFoundException("We have some problems. Sorry, try again later.");
         }
 
