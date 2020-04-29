@@ -7,10 +7,15 @@ Also you can see live stock prices of many companies and to do that you don't ha
 If you want to start the program then first you have to add in `resources` directory a file called `application.properties` and add to it some values.
 Template for that file:
 ```
+# Databases
 spring.datasource.url = YOUR_DATABASE_URL
 spring.datasource.username = YOUR_DATABASE_USERNAME
 spring.datasource.password = YOUR_DATABASE_PASSWORD_IF_YOU_HAVE_ONE
 spring.datasource.hostname=YOUR_DATABASE_HOSTNAME
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL10Dialect
 spring.jpa.properties.hibernate.hbm2ddl.auto=validate
+
+# Logging (SLF4J)
+logging.file.path=logger
+logging.file.name=logger/logfile
 ```
