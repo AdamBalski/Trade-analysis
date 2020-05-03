@@ -1,7 +1,6 @@
 body {
-    background-color: #40494e;
+    background-color: #3e3e3e;
     color: whitesmoke;
+    padding-top: 2%;
 }
-a:hover {
-    color: #c2c2c2;
-}
+.row { margin: 0; padding: 0 }

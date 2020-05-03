@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Please sign in</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link rel ="stylesheet" href="../css/navbar.css">
+    <link rel ="stylesheet" href="../css/main.css">
+    <!--	frontend dev-->
+    <link rel ="stylesheet" href="../static/css/navbar.css">
+    <link rel ="stylesheet" href="../static/css/main.css">
+    <!--	/ frontend dev-->
+
+    <style>
+		.value {
+			max-width: 100%;
+		}
+		.entry {
+			width: 78%;
+			align: center;
+			margin: 0 auto;
+		}
+		label {
+			float:left;
+			margin-left: 10px;
+			font-size: 19px;
+			margin-top: 10px;
+			margin-bottom: 2px;
+		}
+		.input-group-prepend {
+		    max-height: 44px;
+		}
+		.btn {
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body class="text-center">
+
+<div class="container">
+    <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
+        <strong class="row col-12">
+            <a class = "navlink col-4" href = "/">Main page</a>
+            <a class = "navlink col-4" href = "/login">Log in</a>
+            <a class = "navlink col-4" href = "/sign-up">Sign up</a>
+        </strong>
+    </nav>
+</div>
+<div class="row col-12">
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+</div>
+
+    <div class="container main">
+        <form class="form-signin" method="post" action="/login">
+            <h2 class="form-signin-heading">Please sign in</h2>
+
+            <label th:if="${logout}" class="alert alert-success" style="margin-left: 30px;">Successfully logged out</label>
+
+            <div class="entry">
+                <label>Username</label>
+                <div class="value input-group">
+                    <div class="input-group-prepend">
+                            <span class="input-group-addon" id="basic-addon1">
+                                <svg class="bi bi-person-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+                                    <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                </svg>
+                            </span>
+                    </div>
+
+                    <input type="text" aria-describedby="basic-addon1" class="form-control" name="username" placeholder="Username" required autofocus>
+                </div>
+            </div>
+            <div class="entry">
+                <label>Password</label>
+
+                <div class="value input-group">
+                    <div class="input-group-prepend">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="11" height="9" x="2.5" y="7" rx="2"/>
+                                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+                                </svg>
+                            </span>
+                    </div>
+
+                    <input type="password"  aria-describedby="basic-addon2" class="form-control" name="password" placeholder="Password" required>
+                </div>
+            </div>
+            <input type="hidden" name="_csrf" th:value="${csrf}" />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+            <script>
+               $.ajax({
+                    type: "POST",
+                    beforeSend: function (request)
+                    {
+                        request.setRequestHeader("X-CSRF-TOKEN", "${_csrf.token}");
+                    },
+
+                    ///...
+
+                });
+            </script>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>

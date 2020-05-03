@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Sign up</title>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 	<link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="canonical" crossorigin="anonymous"/>
+	<link rel ="stylesheet" href="../css/navbar.css">
+	<link rel ="stylesheet" href="../css/main.css">
+	<!--	frontend dev-->
+	<link rel ="stylesheet" href="../static/css/navbar.css">
+	<link rel ="stylesheet" href="../static/css/main.css">
+	<!--	/ frontend dev-->
 	<style>
 		.value {
 			max-width: 100%;
-			align:center;
-			clear: both;
 		}
 		.entry {
 			width: 78%;
 			align: center;
 			margin: 0 auto;
-		}
-		body {
-			padding-top: 2%;
-			background-color: #eee;
 		}
 		label {
 			float:left;
@@ -27,9 +27,6 @@
 			font-size: 19px;
 			margin-top: 10px;
 			margin-bottom: 2px;
-		}
-		.key {
-			visibility: hidden;
 		}
 		.btn {
 			margin-top: 10px;
@@ -39,34 +36,87 @@
 <body class="text-center">
 
 	<div class="container">
-		<form method="POST" th:action="@{sign-up}" th:object = "${user}" class="form-signin">
+			<nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
+				<strong class="row col-12">
+					<a class = "navlink col-4" href = "/">Main page</a>
+					<a class = "navlink col-4" href = "/login">Log in</a>
+					<a class = "navlink col-4" href = "/sign-up">Sign up</a>
+				</strong>
+			</nav>
+	</div>
+	<div class="row col-12">
+		<div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+		<div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+		<div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+		<div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+	</div>
+
+	<div class="container main">
+		<form method="POST" th:action="@{/sign-up} "th:object = "${user}" class="form-signin">
 			<h2 class="form-signin-heading">Please sign up</h2>
+
 			<div class="entry">
 				<label>Username</label>
-				<div class="value" id="username">
+				<div class="value input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-addon" id="basic-addon1">
+							<svg class="bi bi-person-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+								<path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+							</svg>
+						</span>
+					</div>
 				
-					<input type="text" class="form-control" placeholder="Username" th:field="*{username}" minlength="4" maxlength="30" pattern="[A-Za-z0-9!@#$%^&*()_]{4,30}" required>
+					<input type="text" aria-describedby="basic-addon1" class="form-control" placeholder="Username" th:field="*{username}" minlength="4" maxlength="30" pattern="[A-Za-z0-9!@#$%^&*()_]{4,30}" required>
 				</div>
 			</div>
 			<div class="entry">
 				<label>E-mail</label>
 					
-				<div class="value">
-					<input type="email" class="form-control" placeholder="E-mail" th:field="*{email}" maxlength="50"required>
+				<div class="value input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-addon" id="basic-addon2">
+							<svg class="bi bi-envelope-open" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" d="M.243 6.929l.514-.858L8 10.417l7.243-4.346.514.858L8 11.583.243 6.93z" clip-rule="evenodd"/>
+								<path fill-rule="evenodd" d="M7.184 10.68L.752 14.432l-.504-.864L6.68 9.816l.504.864zm1.632 0l6.432 3.752.504-.864L9.32 9.816l-.504.864z" clip-rule="evenodd"/>
+								<path fill-rule="evenodd" d="M8.47 1.318a1 1 0 00-.94 0l-6 3.2A1 1 0 001 5.4V14a1 1 0 001 1h12a1 1 0 001-1V5.4a1 1 0 00-.53-.882l-6-3.2zM7.06.435a2 2 0 011.882 0l6 3.2A2 2 0 0116 5.4V14a2 2 0 01-2 2H2a2 2 0 01-2-2V5.4a2 2 0 011.059-1.765l6-3.2z" clip-rule="evenodd"/>
+							</svg>
+						</span>
+					</div>
+
+					<input type="email" aria-describedby="basic-addon2" class="form-control" placeholder="E-mail" th:field="*{email}" maxlength="50"required>
 				</div>
 			</div>
 			<div class="entry">
 				<label>Password</label>
 
-				<div class="value">
-					<input type="password" class="form-control" placeholder="Password" th:field="*{password1}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}" required>
+				<div class="value input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-addon" id="basic-addon3">
+							<svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<rect width="11" height="9" x="2.5" y="7" rx="2"/>
+								<path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+							</svg>
+						</span>
+					</div>
+
+					<input type="password" aria-describedby="basic-addon3" class="form-control" placeholder="Password" th:field="*{password1}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}" required>
 				</div>
 			</div>
 			<div class="entry">
 				<label>Confirm password</label>
 				
-				<div class="value">
-					<input type="password" class="form-control" placeholder="Password" th:field="*{password2}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}"	 required>
+				<div class="value input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-addon" id="basic-addon4">
+							<svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<rect width="11" height="9" x="2.5" y="7" rx="2"/>
+								<path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+							</svg>
+						</span>
+					</div>
+
+					<input type="password" aria-describedby="basic-addon4" class="form-control" placeholder="Password" th:field="*{password2}" minlength="8" maxlength="50" pattern="[A-Za-z0-9!@#$%^&*()_]{8,50}"	 required>
 				</div>
 			</div>
 
@@ -75,9 +125,20 @@
 	</div>
 
 	
-		<div class=message th:if="${message.length() != 0}" style="margin-top: 30px;">
-			<label th:text="${message}"></label>
+		<div class="row message" th:if="${message.length() != 0}" style="margin-top: 30px;">
+			<div class = "col-2 col-sm-3 col-md-4"></div>
+			<label class = "col-8 col-sm-6 col-md-4 alert alert-danger" th:text="${message}">Passwords are different</label>
 		</div>
+
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-8">
+				<p></p>
+				<p>Username and password can contain letters, digits and characters from this set: {'!', '@', '#', '$', '%', '^', '&', '*', '(', '), '_'}</p>
+				<p>Minimum length of username is 4 and minimum length of password is 8</p>
+			</div>
+		</div>
+
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

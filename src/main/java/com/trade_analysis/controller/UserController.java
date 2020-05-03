@@ -7,20 +7,23 @@ import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 import com.trade_analysis.service.UserService;
+import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.UUID;
+
+import static com.trade_analysis.dtos_validation.UserSignUpValidationResult.*;
 
 @Controller
 public class UserController {
@@ -77,19 +80,59 @@ public class UserController {
 
     @PreAuthorize(value = "permitAll()")
     @PostMapping(value = "/sign-up")
-    public String signUp(@ModelAttribute UserSignUpDto userSignUpDto, Model model) throws IllegalArgumentException, DataIntegrityViolationException {
-        UserSignUpValidationResult result = UserSignUpValidator.fullValidator.validate(userSignUpDto);
+    public String signUp(@ModelAttribute UserSignUpDto user, Model model) throws IllegalArgumentException, DataIntegrityViolationException {
+        UserSignUpValidationResult result = UserSignUpValidator.fullValidator.validate(user);
 
-        if(result.isSuccess()) {
-            userService.signUp(userSignUpDto);
-            return "redirect://localhost:8080/signed-up";
-        }
-        else {
-            model.addAttribute("user", userSignUpDto);
-            model.addAttribute("message", result.name());
+        if(!result.isSuccess()) {
+            model.addAttribute("user", user);
+
+            String message = "Something went wrong";
+            if(result == PASSWORD_NOT_CORRECT) {
+                message = "Password isn't correct";
+            }
+            else if(result == PASSWORDS_DIFFERENT) {
+                message = "Passwords aren't equal";
+            }
+            else if(result == USERNAME_NOT_CORRECT) {
+                message = "Username isn't correct";
+            }
+
+            model.addAttribute("message", message);
 
             return "sign-up";
         }
+        else if(userService.existsByUsername(user.getUsername())) {
+            model.addAttribute("message", "Username is taken");
+
+            return "sign-up";
+        }
+        else if(userService.existsByEmail(user.getEmail())) {
+            model.addAttribute("message", "E-mail is taken");
+
+            return "sign-up";
+        }
+        else {
+            userService.signUp(user);
+            return "signed-up";
+        }
+    }
+
+    @PreAuthorize(value = "permitAll()")
+    @GetMapping(value = "/login")
+    public String getLoginPage(@RequestParam(name = "logout", defaultValue = "false") boolean logout,
+                               Model model,
+                               CsrfToken csrfToken) {
+        model.addAttribute("logout", logout);
+        model.addAttribute("csrf", csrfToken.getToken());
+
+        return "login";
+    }
+
+    @PreAuthorize(value = "isAuthenticated()")
+    @GetMapping(value = "/logout")
+    public String getLogoutPage(Model model, CsrfToken csrfToken) {
+        model.addAttribute("csrf", csrfToken.getToken());
+        return "logout";
     }
 
     private boolean isAuthenticated() {

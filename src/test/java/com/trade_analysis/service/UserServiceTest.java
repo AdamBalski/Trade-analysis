@@ -182,4 +182,32 @@ public class UserServiceTest {
 
         assertThrows(DataIntegrityViolationException.class, signUpExecutable);
     }
+
+    @Test
+    void testIsSomeoneWithThatUsernameWhenThereIs() {
+        when(userDbDao.existsByUsername("email@email.email")).thenReturn(true);
+
+        assertTrue(userService.existsByUsername("email@email.email"));
+    }
+
+    @Test
+    void testIsSomeoneWithThatUsernameWhenThereIsNot() {
+        when(userDbDao.existsByUsername("email@email.email")).thenReturn(false);
+
+        assertFalse(userService.existsByUsername("email@email.email"));
+    }
+
+    @Test
+    void testIsSomeoneWithThatEmailWhenThereIs() {
+        when(userDbDao.existsByEmail("email@email.email")).thenReturn(true);
+
+        assertTrue(userService.existsByEmail("email@email.email"));
+    }
+
+    @Test
+    void testIsSomeoneWithThatEmailWhenThereIsNot() {
+        when(userDbDao.existsByEmail("email@email.email")).thenReturn(false);
+
+        assertFalse(userService.existsByEmail("email@email.email"));
+    }
 }

@@ -14,4 +14,6 @@ import java.util.UUID;
 public interface UserDbDao extends JpaRepository<User, UUID> {
     Optional<User> getSingleResultByUsername(String username) throws NonUniqueResultException;
     Optional<User> getSingleResultById(UUID id) throws NonUniqueResultException;
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

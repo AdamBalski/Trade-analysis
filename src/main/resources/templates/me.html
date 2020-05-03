@@ -6,46 +6,59 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel ="stylesheet" href="../css/navbar.css">
+    <link rel ="stylesheet" href="../css/main.css">
+    <link rel = "stylesheet" href = "../css/data_style.css">
+    <!--	frontend dev-->
     <link rel ="stylesheet" href="../static/css/navbar.css">
-    <link rel ="stylesheet" href="../static/css/main.css"></head>
-    <link rel = "stylesheet" href = "css/data_style.css">
-<body class="container-fluid">
+    <link rel ="stylesheet" href="../static/css/main.css">
+    <link rel = "stylesheet" href = "../static/css/data_style.css">
+    <!--	/ frontend dev-->
+<body class="container">
 
-    <nav class="row navbar navbar-toggler navbar-dark bg-dark">
-        <a class = "col-4 col-sm-2 col-md-1" href = "/">Main page</a>
-        <a class = "col-4 col-sm-2 col-md-1" href = "/login">Log in</a>
-        <a class = "col-4 col-sm-2 col-md-1" href = "/logout">Log out</a>
-        <a class = "col-4 col-sm-2 col-md-1" href = "/sign-up">Sign up</a>
-        <a class = "col-4 col-sm-2 col-md-1" href = "/me">My data</a>
-        <a class = "col-4 col-sm-2 col-md-1" href = "/users">Users</a>
+    <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
+        <strong class="row col-12">
+            <a class = "navlink col-2" href = "/">Main page</a>
+            <a class = "navlink col-2" href = "/login">Log in</a>
+            <a class = "navlink col-2" href = "/logout">Log out</a>
+            <a class = "navlink col-2" href = "/sign-up">Sign up</a>
+            <a class = "navlink col-2" href = "/me">My data</a>
+            <a class = "navlink col-2" href = "/users">Users</a>
+        </strong>
     </nav>
+    <div class="row col-12">
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    </div>
 
     <div class="container">
         <label class="h1 col-9" style="font-size: 72px;">Your data</label>
     </div>
 
-    <div class = "data container" th:object = "${user}">
-
-        <div class = "row entry col-9">
-            <label class = "font-weight-bolder key col-6 col-md-2">Id:</label>
-            <div class = "font-italic value col-7" th:text = "*{getId().toString()}">f98c3a09-e773-4 col-sm-3 md-col-12b8c-9ea3-c32ca4aa9ff5</div>
+    <div class = "row col-12 data" th:object = "${user}">
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Id:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{getId().toString()}">7903f311-dbf9-4b93-8fe2-fe63868f9f7c</div>
         </div>
-        <div class = "row entry col-9">
-            <label class = "font-weight-bolder key col-6 col-md-2">Username:</label>
-            <div class = "font-italic value col-7" th:text = "*{username}">username</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Username:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{username}">username</div>
         </div>
-        <div class = "row entry col-9">
-            <label class = "font-weight-bolder key col-6 col-md-2">E-mail:</label>
-            <div class = "font-italic value col-7" th:text = "*{email}">email@email.com</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">E-mail:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{email}">email@email.com</div>
         </div>
-        <div class = "row entry col-9">
-            <label class = "font-weight-bolder key col-6 col-md-2">Password:</label>
-            <div class = "font-italic value col-7" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Password:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
         </div>
-        <div class = "row entry col-9">
-            <label class = "font-weight-bolder key col-6 col-md-2">Role</label>
-            <div class = "font-italic value col-7" th:text = "*{getUserRole().name()}">USUAL</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Role</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{getUserRole().name()}">USUAL</div>
         </div>
+    </div>
 
     <div style="height: 10px;"></div>
     <div class="row col-12">
@@ -53,7 +66,7 @@
     </div>
 
     <div  class="settings col-12">
-        <a class="row" href="/delete">Delete your account (be sure when it delete, you won't be able to restore it)</a>
+        <a class="row" href="/delete">Delete your account (be sure when you click, you won't be able to restore it)</a>
     </div>
 
 </body>

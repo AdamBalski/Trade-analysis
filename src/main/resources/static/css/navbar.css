@@ -1,3 +1,19 @@
 a {
     color: whitesmoke;
 }
+a:hover {
+    color: white;
+}
+.navlink {
+    color: #FFFFFF;
+    font-size: 18px;
+}
+.navbar {
+    min-height: 30px;
+}
+.input-group-prepend {
+    min-height: 100%;
+}
+.input-group-addon {
+    min-height: 100%;
+}

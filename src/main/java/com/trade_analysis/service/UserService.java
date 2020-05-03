@@ -61,4 +61,12 @@ public class UserService {
     public void signUp(UserSignUpDto userSignUpDto) throws DataIntegrityViolationException {
         userDbDao.save(User.valueOf(userSignUpDto));
     }
+
+    public boolean existsByUsername(String username) {
+        return userDbDao.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userDbDao.existsByEmail(email);
+    }
 }

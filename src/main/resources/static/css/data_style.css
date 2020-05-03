@@ -1,5 +1,6 @@
 .data {
     height: auto;
+    word-break: break-all;
 }
 .entry {
     height: auto;
