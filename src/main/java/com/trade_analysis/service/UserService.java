@@ -69,4 +69,8 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userDbDao.existsByEmail(email);
     }
+
+    public void deleteUserById(UUID id) {
+        userDbDao.deleteById(id);
+    }
 }

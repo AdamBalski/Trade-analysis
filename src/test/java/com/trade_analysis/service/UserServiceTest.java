@@ -210,4 +210,13 @@ public class UserServiceTest {
 
         assertFalse(userService.existsByEmail("email@email.email"));
     }
+
+    @Test
+    void testDeletingUser() {
+        UUID id = UUID.randomUUID();
+
+        userService.deleteUserById(id);
+
+        verify(userDbDao).deleteById(id);
+    }
 }

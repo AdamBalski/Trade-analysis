@@ -30,7 +30,7 @@
 			margin-bottom: 2px;
 		}
 		.input-group-prepend {
-		    max-height: 44px;
+		    max-height: 42px;
 		}
 		.btn {
 			margin-top: 10px;
@@ -60,6 +60,7 @@
             <h2 class="form-signin-heading">Please sign in</h2>
 
             <label th:if="${logout}" class="alert alert-success" style="margin-left: 30px;">Successfully logged out</label>
+            <label th:if="${error}" class="alert alert-danger" style="margin-left: 40px;">Wrong credentials</label>
 
             <div class="entry">
                 <label>Username</label>

@@ -1,21 +1,19 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.com">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta charset="UTF-8">
-    <title>All users</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel ="stylesheet" href="../css/navbar.css">
     <link rel ="stylesheet" href="../css/main.css">
-    <link rel = "stylesheet" href = "../css/data_style.css">
     <!--	frontend dev-->
     <link rel ="stylesheet" href="../static/css/navbar.css">
     <link rel ="stylesheet" href="../static/css/main.css">
-    <link rel = "stylesheet" href = "../static/css/data_style.css">
     <!--	/ frontend dev-->
-<body class="container">
-
+</head>
+<body>
     <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
         <strong class="row col-12">
             <a class = "navlink col-2" href = "/">Main page</a>
@@ -33,30 +31,32 @@
         <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
     </div>
 
-    <div class="container">
-        <label class="h1 col-9" style="font-size: 72px;">All users</label>
-    </div>
-
-    <table class="table" style="color: whitesmoke;">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Id</th>
-                <th scope="col">Username</th>
-                <th scope="col">E-mail</th>
-                <th scope="col">User Role</th>
-            </tr>
-        </thead>
-        <div class = "container">
-            <tr th:each = "i: ${#numbers.sequence(0, users.size() - 1)}">
-                <th scope="row" th:text="${i}"></th>
-                <td th:utext="${users.get(i).id}"></td>
-                <td th:utext="${users.get(i).username}"></td>
-                <td th:text="${users.get(i).email}"></td>
-                <td th:text="${users.get(i).userRole}"></td>
-            </tr>
+    <form class="row col-12 container-fluid" style="height: 50px !important;">
+        <div style="margin: 0 !important; height: 50px !important;">
+            <input placeholder="API VANTAGE KEY" th:field="${apiKey}" required>
         </div>
-    </table>
+
+        <div class="dropdown" style="margin: 0 !important; max-height: 30px !important; padding: 0 !important;">
+            <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Symbol
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">GOOGL</a>
+                    <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">AMZN</a>
+                    <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">MSFT</a>
+                    <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">CSCO</a>
+                    <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">AAPL</a>
+                    <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">IBM</a>
+            </div>
+        </div>
+    </form>
+
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

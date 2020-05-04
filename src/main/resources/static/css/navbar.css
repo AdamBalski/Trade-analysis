@@ -6,7 +6,10 @@ a:hover {
 }
 .navlink {
     color: #FFFFFF;
-    font-size: 18px;
+    font-size: 23px;
+    padding: 4px 0;
+    padding-left: 3.2%;
+    padding-right: 0;
 }
 .navbar {
     min-height: 30px;

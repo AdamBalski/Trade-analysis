@@ -38,7 +38,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll()
+                .formLogin().loginPage("/login").loginProcessingUrl("/login").failureUrl("/login?error=true").permitAll()
                 .and()
                 .logout().clearAuthentication(true).invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessUrl("/login?logout=true").permitAll();
     }

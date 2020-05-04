@@ -10,9 +10,11 @@ import com.trade_analysis.service.UserService;
 import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -21,11 +23,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NonUniqueResultException;
+import java.security.Security;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static com.trade_analysis.dtos_validation.UserSignUpValidationResult.*;
 
 @Controller
+@SuppressWarnings(value = "unused")
 public class UserController {
     @Autowired
     UserService userService;
@@ -36,7 +41,6 @@ public class UserController {
         if(isAuthenticated()) {
             String greeting = String.format("Hello, %s!", getName());
             model.addAttribute("greeting", greeting);
-            System.out.println();
         }
 
         return "index";
@@ -44,7 +48,7 @@ public class UserController {
 
     @GetMapping(value = "/me")
     @PreAuthorize(value = "isAuthenticated()")
-    public String getMyData(Model model) throws UserNotFoundException, UsernameNotUniqueException {
+    public String getMyData(Model model) throws UserNotFoundException {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("user", userService.getUserByUsername(name));
 
@@ -54,7 +58,7 @@ public class UserController {
     @GetMapping(value = "users")
     @PreAuthorize(value = "hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUserLinks());
+        model.addAttribute("users", userService.getAllUsers());
         return "users";
     }
 
@@ -80,12 +84,10 @@ public class UserController {
 
     @PreAuthorize(value = "permitAll()")
     @PostMapping(value = "/sign-up")
-    public String signUp(@ModelAttribute UserSignUpDto user, Model model) throws IllegalArgumentException, DataIntegrityViolationException {
+    public String signUp(@ModelAttribute UserSignUpDto user, Model model) {
         UserSignUpValidationResult result = UserSignUpValidator.fullValidator.validate(user);
 
         if(!result.isSuccess()) {
-            model.addAttribute("user", user);
-
             String message = "Something went wrong";
             if(result == PASSWORD_NOT_CORRECT) {
                 message = "Password isn't correct";
@@ -98,31 +100,31 @@ public class UserController {
             }
 
             model.addAttribute("message", message);
-
-            return "sign-up";
         }
         else if(userService.existsByUsername(user.getUsername())) {
             model.addAttribute("message", "Username is taken");
-
-            return "sign-up";
         }
         else if(userService.existsByEmail(user.getEmail())) {
             model.addAttribute("message", "E-mail is taken");
-
-            return "sign-up";
         }
         else {
             userService.signUp(user);
-            return "signed-up";
+            return "login";
         }
+
+        model.addAttribute("user", user);
+        return "sign-up";
     }
 
     @PreAuthorize(value = "permitAll()")
     @GetMapping(value = "/login")
     public String getLoginPage(@RequestParam(name = "logout", defaultValue = "false") boolean logout,
+                               @RequestParam(name = "error", defaultValue = "false") boolean error,
                                Model model,
                                CsrfToken csrfToken) {
         model.addAttribute("logout", logout);
+        model.addAttribute("error", error);
+
         model.addAttribute("csrf", csrfToken.getToken());
 
         return "login";
@@ -133,6 +135,24 @@ public class UserController {
     public String getLogoutPage(Model model, CsrfToken csrfToken) {
         model.addAttribute("csrf", csrfToken.getToken());
         return "logout";
+    }
+
+
+    @PreAuthorize(value = "isAuthenticated()")
+    @GetMapping(value = "/delete")
+    public String getDeletePage() {
+        return "delete";
+    }
+
+    @PreAuthorize(value = "isAuthenticated()")
+    @PostMapping(value = "/delete")
+    public String delete() throws UserNotFoundException {
+        User user = userService.getUserByUsername(getName());
+        userService.deleteUserById(user.getId());
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return "index";
     }
 
     private boolean isAuthenticated() {

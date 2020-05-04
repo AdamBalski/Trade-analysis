@@ -1,81 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<html lang="en" xmlns:th = "http://www.thymeleaf.com">
 <head>
-
     <meta charset="UTF-8">
-    <title th:utext = "${title}"></title>
+    <title th:text="${title}"></title>
 
-    <style>
-        .menu {
-            margin: auto;
-            margin-top: 50px;
-            background-color: goldenrod;
-            padding-left: 30px;
-            padding-right: 10px;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            width: 640px;
-        }
-        .user-data-container {
-            margin: auto;
-            margin-top: 50px;
-            background-color: coral;
-            padding-left: 30px;
-            padding-right: 10px;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            width: 640px;
-        }
-        .entry {
-            width: 600px;
-            height: 30px;
-        }
-        .key {
-            width: 100px;
-            float: left;
-        }
-        .value {
-            width: 500px;
-            float: left
-        }
-    </style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel ="stylesheet" href="../css/navbar.css">
+    <link rel ="stylesheet" href="../css/main.css">
+    <link rel = "stylesheet" href = "../css/data_style.css">
+    <!--	frontend dev-->
+    <link rel ="stylesheet" href="../static/css/navbar.css">
+    <link rel ="stylesheet" href="../static/css/main.css">
+    <link rel = "stylesheet" href = "../static/css/data_style.css">
+    <!--	/ frontend dev-->
 </head>
-<body>
+<body class="container">
 
-    <div class = "menu">
-        <a href = "/">Main page</a>
-        <a href = "/login">Log in</a>
-        <a href = "/logout">Log out</a>
-        <a href = "/sign-up">Sign up</a>
-        <a href = "/me/delete">Delete account</a>
-        <a href = "/me">My data</a>
-        <a href = "/users">Users</a>
+    <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
+        <strong class="row col-12">
+            <a class = "navlink col-2" href = "/">Main page</a>
+            <a class = "navlink col-2" href = "/login">Log in</a>
+            <a class = "navlink col-2" href = "/logout">Log out</a>
+            <a class = "navlink col-2" href = "/sign-up">Sign up</a>
+            <a class = "navlink col-2" href = "/me">My data</a>
+            <a class = "navlink col-2" href = "/users">Users</a>
+        </strong>
+    </nav>
+    <div class="row col-12">
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+        <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
     </div>
 
-    <div class = "user-data-container" th:object = "${user}">
+    <div class="container">
+        <label class="h1 col-9" style="font-size: 72px;" th:text="${user.getId().toString()}">7903f311-dbf9-4b93-8fe2-fe63868f9f7c</label>
+    </div>
 
-        <div class = "entry">
-            <div class = "key">Id:</div>
-            <div class = "value" th:text = "*{getId().toString()}">1a431032-ff95-4786-b68f-cfc367441dcd</div>
+    <div class = "row col-12 data" th:object = "${user}">
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Username:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{username}">username</div>
         </div>
-        <div class = "entry">
-            <div class = "key">Username:</div>
-            <div class = "value" th:text = "*{username}">test</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">E-mail:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{email}">email@email.com</div>
         </div>
-        <div class = "entry">
-            <div class = "key">E-mail:</div>
-            <div class = "value" th:text = "*{email}">test@test.com</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Password:</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
         </div>
-        <div class = "entry">
-            <div class = "key">Password:</div>
-            <div class = "value" th:text = "*{password}">$2a$10$A8ceZKEMDLwrDaxtOD61q.XIKw0tBaoQ742OP10mE/1TdNfkk73fW</div>
-        </div>
-        <div class = "entry">
-            <div class = "key">Role:</div>
-            <div class = "value" th:text = "*{getUserRole().name()}">USUAL</div>
+        <div class = "entry col-12 col-md-9" style="max-width: 75%;">
+            <label class = "font-weight-bolder key col-12 col-md-4">Role</label>
+            <div class = "font-italic value col-12 col-md-9" th:text = "*{getUserRole().name()}">USUAL</div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 
 </body>
 </html>
