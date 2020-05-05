@@ -19,3 +19,4 @@ spring.jpa.properties.hibernate.hbm2ddl.auto=validate
 logging.file.path=logger
 logging.file.name=logger/logfile
 ```
+Also you have to add logger directory and put file called logfile in it
