@@ -50,7 +50,9 @@
         <div class = "container">
             <tr th:each = "i: ${#numbers.sequence(0, users.size() - 1)}">
                 <th scope="row" th:text="${i}"></th>
-                <td th:utext="${users.get(i).id}"></td>
+                <td>
+                    <a th:href='${"/user/" + users.get(i).getId().toString()}' th:text="${users.get(i).getId().toString()}"></a>
+                </td>
                 <td th:utext="${users.get(i).username}"></td>
                 <td th:text="${users.get(i).email}"></td>
                 <td th:text="${users.get(i).userRole}"></td>

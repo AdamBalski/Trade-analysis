@@ -1,6 +1,9 @@
 ### Executables ###
 target/
 
+### Logger
+logger/*
+
 ### Maven ###
 mvnw.cmd
 mvnw
