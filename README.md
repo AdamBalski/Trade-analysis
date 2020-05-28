@@ -9,11 +9,11 @@ Template for that file:
 ```
 # Databases
 spring.datasource.url = YOUR_DATABASE_URL
-spring.datasource.username = YOUR_DATABASE_USERNAME
-spring.datasource.password = YOUR_DATABASE_PASSWORD_IF_YOU_HAVE_ONE
-spring.datasource.hostname=YOUR_DATABASE_HOSTNAME
+spring.datasource.username = USERNAME_OF_YOUR_DATABASE'S_USER
+spring.datasource.password = PASSWORD_OF_YOUR_DATABASE'S_USER_IF_YOUR_USER_HAS_ONE
+spring.datasource.hostname = YOUR_DATABASE'S_HOSTNAME
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL10Dialect
-spring.jpa.properties.hibernate.hbm2ddl.auto=validate
+spring.jpa.properties.hibernate.hbm2ddl.auto = validate
 
 # Logging (SLF4J)
 logging.file.path=logger
