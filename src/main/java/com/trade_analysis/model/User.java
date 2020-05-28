@@ -35,6 +35,9 @@ public class User {
     @Column(name = "user_role", nullable = false, columnDefinition = "varchar(15)")
     private UserRole userRole;
 
+    @Column(name = "api_key", nullable = true, columnDefinition = "varchar(20)")
+    private String apiKey;
+
     public static User valueOf(UserSignUpDto userSignUpDto) {
         String password = new BCryptPasswordEncoder(10).encode(userSignUpDto.getPassword1());
 
@@ -42,7 +45,8 @@ public class User {
                 userSignUpDto.getUsername(),
                 userSignUpDto.getEmail(),
                 password,
-                USUAL);
+                USUAL,
+                null);
     }
 
     public List<GrantedAuthority> getGrantedAuthorities() {
@@ -69,31 +73,35 @@ public class User {
                 .append(password)
                 .append("',userRole='")
                 .append(userRole.name())
+                .append("',apiKey='")
+                .append(apiKey == null ? "null" : apiKey)
                 .append("'}")
                 .toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(!(o instanceof User)) return false;
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
 
         User user = (User) o;
 
-        if(getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
-        if(getUsername() != null ? !getUsername().equals(user.getUsername()) : user.getUsername() != null) return false;
-        if(getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
-        if(getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null) return false;
-        return getUserRole() == user.getUserRole();
+        if (!id.equals(user.id)) return false;
+        if (!username.equals(user.username)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!password.equals(user.password)) return false;
+        if (userRole != user.userRole) return false;
+        return apiKey != null ? apiKey.equals(user.apiKey) : user.apiKey == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
-        result = 31 * result + (getUserRole() != null ? getUserRole().hashCode() : 0);
+        int result = id.hashCode();
+        result = 31 * result + username.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + userRole.hashCode();
+        result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
         return result;
     }
 }

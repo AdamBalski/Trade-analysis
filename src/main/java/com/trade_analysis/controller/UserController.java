@@ -4,30 +4,22 @@ import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.dtos_validation.UserSignUpValidationResult;
 import com.trade_analysis.dtos_validation.UserSignUpValidator;
 import com.trade_analysis.exception.UserNotFoundException;
-import com.trade_analysis.exception.UsernameNotUniqueException;
 import com.trade_analysis.model.User;
 import com.trade_analysis.service.UserService;
-import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NonUniqueResultException;
-import java.security.Security;
-import java.util.Arrays;
 import java.util.UUID;
 
 import static com.trade_analysis.dtos_validation.UserSignUpValidationResult.*;
+import static com.trade_analysis.model.UserRole.USUAL;
 
 @Controller
 @SuppressWarnings(value = "unused")
@@ -37,11 +29,14 @@ public class UserController {
 
     @GetMapping(value = "/")
     @PreAuthorize(value = "permitAll()")
-    public String getMainPage(Model model) {
+    public String getMainPage(Model model) throws UserNotFoundException {
         if(isAuthenticated()) {
-            String greeting = String.format("Hello, %s!", getName());
+            User user = userService.getUserByUsername(getName());
+            String greeting = String.format("Hello, %s!", user.getUsername());
             model.addAttribute("greeting", greeting);
+            model.addAttribute("admin", user.getUserRole() != USUAL);
         }
+        else model.addAttribute("admin", false);
 
         return "index";
     }

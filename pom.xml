@@ -12,19 +12,13 @@
 	<artifactId>Trade-Analysis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Trade-Analysis</name>
-	<description>Analyse stock market.</description>
+	<description>Analyzes stock market</description>
 
 	<properties>
 		<java.version>14</java.version>
 	</properties>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>com.jimmoores</groupId>
-			<artifactId>quandl-core</artifactId>
-			<version>2.1.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -57,6 +51,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 			<exclusions>
+				<exclusion>
+					<groupId>com.vaadin.external.google</groupId>
+					<artifactId>android-json</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>org.junit.vintage</groupId>
 					<artifactId>junit-vintage-engine</artifactId>
@@ -100,6 +98,11 @@
 			<version>5.4.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20190722</version>
+		</dependency>
 
 	</dependencies>
 
@@ -113,8 +116,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>13</source>
-                    <target>13</target>
+                    <source>14</source>
+                    <target>14</target>
                 </configuration>
             </plugin>
         </plugins>

@@ -44,13 +44,13 @@ public class UserServiceTest {
 
         users = of(
                 new User(UUID.fromString("fd91c269-ab5c-4f8a-907a-e7f044239781"), "username3", "username3@email.com",
-                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL),
+                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "3QP33URO6DL3OPTC"),
 
                 new User(UUID.fromString("48ee79d6-3350-4ab4-a33f-f176051741e4"), "username4", "username4@email.com",
-                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL),
+                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL, null),
 
                 new User(UUID.fromString("1a0c1f7e-9b6d-44cd-80c2-bb166f29f082"), "username5", "username5@email.com",
-                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN));
+                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN, "EBCXTDAT5J280GRL"));
 
         userSignUpDto = new UserSignUpDto("username", "email@email.com", "password1", "password2");
     }
@@ -122,10 +122,10 @@ public class UserServiceTest {
         List<String> expected = of(
                 "<a href = '/user/48ee79d6-3350-4ab4-a33f-f176051741e4' >User{id='48ee79d6-3350-4ab4-a33f-f176051741e4'," +
                     "username='username4',email='username4@email.com'," +
-                    "password='$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS',userRole='USUAL'}</a>",
+                    "password='$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS',userRole='USUAL',apiKey='null'}</a>",
                 "<a href = '/user/1a0c1f7e-9b6d-44cd-80c2-bb166f29f082' >User{id='1a0c1f7e-9b6d-44cd-80c2-bb166f29f082'," +
                         "username='username5',email='username5@email.com'," +
-                        "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN'}</a>");
+                        "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN',apiKey='EBCXTDAT5J280GRL'}</a>");
 
         assertEquals(expected, userService.getAllUserLinks());
     }

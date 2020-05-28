@@ -7,15 +7,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 @Service("stockMarketService")
 public class StockMarketService {
