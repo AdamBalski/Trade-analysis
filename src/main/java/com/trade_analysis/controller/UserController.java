@@ -109,7 +109,9 @@ public class UserController {
         }
         else {
             userService.signUp(user);
-            return "login";
+
+            model.addAttribute("username", user.getUsername());
+            return "signed-up";
         }
 
         model.addAttribute("user", user);
