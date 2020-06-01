@@ -1,9 +1,12 @@
-Tool for trade analysis
-============
+#Tool for trade analysis
+
+#### Description
 It provides simple analysis of the stock market, but you have to give the alpha vantage api key.
 You can register yourself, so the app will remember you, so you won't have to tell the key every time.
 Also you can see live stock prices of many companies and to do that you don't have to own your api key.
-------------
+
+---
+#### Prerequisites to run
 If you want to start the program then first you have to add in the `resources` directory a file called `application.properties` and add to it some values.
 Template for that file:
 ```
@@ -19,4 +22,20 @@ spring.jpa.properties.hibernate.hbm2ddl.auto = validate
 logging.file.path=logger
 logging.file.name=logger/logfile
 ```
-Also you have to add a `logger` directory and put a file called `logfile` in it
+Also you have to add a `logger` directory and put a file called `logfile` in it.
+
+---
+#### Done with
+* backend - maven dependencies:
+    * check 'pom.xml'
+    * postgres database
+* frontend:
+    * bootstrap
+    * popper.js
+    * jQuery
+* IDEs and text editors:
+    * intellij idea,
+    * vim
+    * vs code
+* tools:
+    * git

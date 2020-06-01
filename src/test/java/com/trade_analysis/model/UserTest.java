@@ -157,11 +157,11 @@ class UserTest {
 
     @Test
     public void testEqualsWithNull() {
-        assertFalse(users.get(0).equals(null));
+        assertNotEquals(null, users.get(0));
     }
 
     @Test
     public void testEqualsWithNotUser() {
-        assertFalse(users.get(0).equals(new ArrayList<>()));
+        assertNotEquals(users.get(0), new ArrayList<>());
     }
 }
