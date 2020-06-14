@@ -33,9 +33,3 @@ Also you have to add a `logger` directory and put a file called `logfile` in it.
     * bootstrap
     * popper.js
     * jQuery
-* IDEs and text editors:
-    * intellij idea,
-    * vim
-    * vs code
-* tools:
-    * git
