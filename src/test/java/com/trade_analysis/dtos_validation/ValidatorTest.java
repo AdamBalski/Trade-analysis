@@ -7,8 +7,8 @@ import static com.trade_analysis.dtos_validation.SimpleValidationResult.SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ValidatorTest {
-    public static final Validator<Object, SimpleValidationResult> returnsSuccess = o -> SUCCESS;
-    public static final Validator<Object, SimpleValidationResult> returnsFailure = o -> FAILURE;
+    static final Validator<Object, SimpleValidationResult> returnsSuccess = o -> SUCCESS;
+    static final Validator<Object, SimpleValidationResult> returnsFailure = o -> FAILURE;
 
     @Test
     void testReturnsSuccessAndReturnsFailure() {
@@ -47,7 +47,6 @@ class ValidatorTest {
 enum SimpleValidationResult implements ValidationResult {
     SUCCESS,
     FAILURE;
-
 
     @Override
     public boolean isSuccess() {

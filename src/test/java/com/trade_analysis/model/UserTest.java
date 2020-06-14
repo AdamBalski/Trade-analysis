@@ -21,7 +21,7 @@ class UserTest {
     private List<User> users;
 
     @BeforeEach
-    public void init() {
+    void init() {
         users = List.of(
                 new User(UUID.fromString("fd91c269-ab5c-4f8a-907a-e7f044239781"), "username3", "username3@email.com",
                         "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "RCAK7TCIWA32NQTY"),
@@ -41,7 +41,7 @@ class UserTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         String expected = "User{id='1a0c1f7e-9b6d-44cd-80c2-bb166f29f082',username='username5',email='username5@email.com'," +
                 "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN',apiKey='null'}";
 
@@ -49,7 +49,7 @@ class UserTest {
     }
 
     @Test
-    public void testGetLink() {
+    void testGetLink() {
         assertEquals("<a href = '/user/1a0c1f7e-9b6d-44cd-80c2-bb166f29f082' >User{id='1a0c1f7e-9b6d-44cd-80c2-bb166f29f082'," +
                 "username='username5',email='username5@email.com'," +
                 "password='$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue',userRole='ADMIN',apiKey='null'}</a>",
@@ -57,12 +57,12 @@ class UserTest {
     }
 
     @Test
-    public void testGetGrantedAuthorities() {
+    void testGetGrantedAuthorities() {
         assertEquals(List.of(new GrantedAuthorityImpl(USUAL)), users.get(0).getGrantedAuthorities());
     }
 
     @Test
-    public void testValueOfDto() {
+    void testValueOfDto() {
         User user = User.valueOf(UserSignUpDto
                 .builder()
                 .username("username")
@@ -83,7 +83,7 @@ class UserTest {
             "0, 1",
             "3, 4"
     })
-    public void testHashCodeIsIdenticalIfUsersAre(int a, int b) {
+    void testHashCodeIsIdenticalIfUsersAre(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
@@ -102,7 +102,7 @@ class UserTest {
             "0, 1",
             "3, 4"
     })
-    public void testEqualsReturnsTrueIfUsersAreIdentical(int a, int b) {
+    void testEqualsReturnsTrueIfUsersAreIdentical(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
@@ -125,7 +125,7 @@ class UserTest {
             "2, 3, 0",
             "0, 1, 2"
     })
-    public void testEqualsIsTransitive(int a, int b, int c) {
+    void testEqualsIsTransitive(int a, int b, int c) {
         User first = users.get(a);
         User second = users.get(b);
         User third = users.get(c);
@@ -143,7 +143,7 @@ class UserTest {
             "0, 1",
             "3, 4"
     })
-    public void testEqualsIsSymmetric(int a, int b) {
+    void testEqualsIsSymmetric(int a, int b) {
         User first = users.get(a);
         User second = users.get(b);
 
@@ -151,17 +151,17 @@ class UserTest {
     }
 
     @Test
-    public void testEqualsIsReflexive() {
+    void testEqualsIsReflexive() {
         assertEquals(users.get(0), users.get(0));
     }
 
     @Test
-    public void testEqualsWithNull() {
+    void testEqualsWithNull() {
         assertNotEquals(null, users.get(0));
     }
 
     @Test
-    public void testEqualsWithNotUser() {
+    void testEqualsWithNotUser() {
         assertNotEquals(users.get(0), new ArrayList<>());
     }
 }

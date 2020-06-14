@@ -3,13 +3,12 @@ package com.trade_analysis.util;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import util.FileManager;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class FileManagerTest {
+public class FileTest {
     public final String expectedAsString = "{\n" +
             "  \"fruit\": \"Apple\",\n" +
             "  \"size\": \"Large\",\n" +
@@ -30,7 +29,7 @@ public class FileManagerTest {
     void testGetFileAsJSONObject() {
         JSONObject actual = null;
         try {
-            actual = new FileManager("src/test/resources/sample file").getFileAsJSONObject();
+            actual = new File("src/test/resources/sample file").getFileAsJSONObject();
         } catch (IOException e) {
             fail("IOException on getting sample file on testGetFileAsJSONObject()");
         }
@@ -42,7 +41,7 @@ public class FileManagerTest {
     void getFileAsStringArray() {
         String[] actual = new String[0];
         try {
-            actual = new FileManager("src/test/resources/sample file").getFileAsStringArray();
+            actual = new File("src/test/resources/sample file").getFileAsStringArray();
         } catch (IOException e) {
             fail("IOException on getting sample file on testGetFileAsJSONObject()");
         }
@@ -54,7 +53,7 @@ public class FileManagerTest {
     void testGetFileAsString() {
         String actual = null;
         try {
-            actual = new FileManager("src/test/resources/sample file").getFileAsString();
+            actual = new File("src/test/resources/sample file").getFile();
         } catch (IOException e) {
             fail("IOException on getting sample file on testGetFileAsJSONObject()");
         }

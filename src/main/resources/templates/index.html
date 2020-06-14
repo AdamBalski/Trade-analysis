@@ -24,7 +24,7 @@
             <a class = "navlink col-2" href = "/logout">Log out</a>
             <a class = "navlink col-2" href = "/sign-up">Sign up</a>
             <a class = "navlink col-2" href = "/me">My data</a>
-            <a th:if="${admin}" class = "navlink col-2" href = "/users">Users</a>
+            <a class = "navlink col-2" href = "/users">Users</a>
         </strong>
     </nav>
     <div class="row col-12">
@@ -44,6 +44,13 @@
         You can registrate yourself, so the app will remember you, so you won't have to tell the key everytime.<br>
         Also you can see live stock prices of many companies and to do that you don't have to own your api key.<br>
     </h3>
+
+    <div class="row col-6 col-lg-3" style="height: 40px;">
+        <a class="btn btn-primary" href = "/stocks" style="margin-top: 40px; font-size: 200%;">
+            Stock prices
+        </a>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

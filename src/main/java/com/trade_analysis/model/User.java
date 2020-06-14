@@ -35,7 +35,7 @@ public class User {
     @Column(name = "user_role", nullable = false, columnDefinition = "varchar(15)")
     private UserRole userRole;
 
-    @Column(name = "api_key", nullable = true, columnDefinition = "varchar(20)")
+    @Column(name = "api_key", columnDefinition = "varchar(20)")
     private String apiKey;
 
     public static User valueOf(UserSignUpDto userSignUpDto) {

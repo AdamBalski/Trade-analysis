@@ -1,18 +1,16 @@
 package com.trade_analysis.dtos;
 
-import com.trade_analysis.model.StockSymbol;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class StockQueryDto {
     private String apiKey;
-    private StockSymbol symbol;
+    private String symbol;
+    private String period;
 
     public StockQueryDto(String apiKey) {
         this.apiKey = apiKey;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Document</title>
+    <title>Stock Prices</title>
     <link rel="icon" type="/image/png" href="img/icon.png">
 
 
@@ -14,6 +14,29 @@
     <link rel ="stylesheet" href="../static/css/navbar.css">
     <link rel ="stylesheet" href="../static/css/main.css">
     <!--	/ frontend dev-->
+
+    <style>
+        .main {
+            margin: 0 0 0 100px;
+        }
+        .form-item:focus {
+            outline: none;
+        }
+        .form-item {
+            height: 30px;
+            margin: 0 10px 0 0;
+            border-radius: 8px;
+            border: 0;
+            padding: 0 13px 0 13px;
+        }
+        .dropdown-menu-button {
+            height: 100% !important;
+            padding: auto !important;
+        }
+        #stock-form {
+            height: 100% !important;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
@@ -33,31 +56,44 @@
         <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
     </div>
 
-    <form class="row col-12 container-fluid" style="height: 50px !important;">
-        <div style="margin: 0 !important; height: 50px !important;">
-            <input placeholder="API VANTAGE KEY" th:field="${apiKey}" required>
-        </div>
-
-        <div class="dropdown" style="margin: 0 !important; max-height: 30px !important; padding: 0 !important;">
-            <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Symbol
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">GOOGL</a>
-                    <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">AMZN</a>
-                    <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">MSFT</a>
-                    <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">CSCO</a>
-                    <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">AAPL</a>
-                    <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">IBM</a>
+    <div class="main">
+        <form method="POST" th:action="@{/stocks}" class="row col-12 container-fluid" id="stock-form" th:object="${stockQueryDto}" style="height: 50px !important;">
+            <div style="margin: 0 !important; height: 50px !important;">
+                <input type="text" class="form-item" id="api-key-field" placeholder="API VANTAGE KEY" th:value="*{apiKey}" th:field="*{apiKey}" required>
             </div>
-        </div>
-    </form>
 
+            <select class="form-item" th:field="*{period}" required>
+                <option value="" selected disabled hidden id="default-period">Period</option>
+                <option class="dropdown-menu-button" th:each="periodOption: ${periods}" th:value="${periodOption}" th:text="${periodOption.prettified}"></option>
+            </select>
+
+            <select class="form-item" th:field="*{symbol}" required>
+                <option value="" selected disabled hidden id="default-symbol">Symbol</option>
+                <option class="dropdown-menu-button" th:each="symbolOption: ${symbols}" th:value="${symbolOption}" th:text="${symbolOption}"></option>
+            </select>
+
+            <button class="form-item" type="submit"> Show </button>
+        </form>
+
+        <div class="container-fluid" id="error-info">
+            <span th:text="${info}"></span>
+        </div>
+
+        <div class="container-fluid" id="result-wrapper">
+            <span id="result"></span>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = '[[${stockQueryDto.getApiKey()}]]';
+
+        document.getElementById('api-key-field').value = apiKey;
+        document.getElementById('default-symbol').selected = 'selected';
+
+        let result = '[[${result}]]';
+
+        document.getElementById('result').innerHTML = result;
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

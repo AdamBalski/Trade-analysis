@@ -1,6 +1,5 @@
 package com.trade_analysis.dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trade_analysis.model.StockSymbol;
 import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
@@ -29,7 +28,7 @@ public class StockMarketDao {
         return new JSONObject(str);
     }
 
-    public JSONObject getDailyStockPricesFromLast100Days(String apiKey, StockSymbol symbol) throws JsonProcessingException {
+    public JSONObject getDailyStockPricesFromLast100Days(String apiKey, StockSymbol symbol) {
         var url = String.format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=%s&outputsize=compact&apikey=%s", symbol.name(), apiKey);
         var restTemplate = new RestTemplate();
         var str = restTemplate.getForObject(url, String.class);

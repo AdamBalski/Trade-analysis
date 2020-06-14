@@ -15,3 +15,4 @@ public enum StockSymbol {
         this.sys = sys;
     }
 }
+

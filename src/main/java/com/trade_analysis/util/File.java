@@ -1,6 +1,5 @@
-package util;
+package com.trade_analysis.util;
 
-import lombok.Getter;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -8,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class File {
-    @Getter
     private final String file;
 
     public File(String path) throws IOException {
@@ -39,7 +37,7 @@ public class File {
         return file.split("\n");
     }
 
-    public String getFileAsString() {
+    public String getFile() {
         return file;
     }
 }

@@ -46,6 +46,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Username</th>
                 <th scope="col">E-mail</th>
+                <th scope="col">Api Key</th>
                 <th scope="col">User Role</th>
             </tr>
         </thead>
@@ -57,6 +58,7 @@
                 </td>
                 <td th:utext="${users.get(i).username}"></td>
                 <td th:text="${users.get(i).email}"></td>
+                <td th:text="${users.get(i).apiKey}"></td>
                 <td th:text="${users.get(i).userRole}"></td>
             </tr>
         </div>

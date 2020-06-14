@@ -31,7 +31,7 @@ public class UserController {
     @PreAuthorize(value = "permitAll()")
     public String getMainPage(Model model) throws UserNotFoundException {
         if(isAuthenticated()) {
-            User user = userService.getUserByUsername(getName());
+            User user = userService.getUserByUsername(getUsername());
             String greeting = String.format("Hello, %s!", user.getUsername());
             model.addAttribute("greeting", greeting);
             model.addAttribute("admin", user.getUserRole() != USUAL);
@@ -144,7 +144,7 @@ public class UserController {
     @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(value = "/delete")
     public String delete() throws UserNotFoundException {
-        User user = userService.getUserByUsername(getName());
+        User user = userService.getUserByUsername(getUsername());
         userService.deleteUserById(user.getId());
 
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -156,7 +156,7 @@ public class UserController {
         return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
 
-    private String getName() {
+    private String getUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
