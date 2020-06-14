@@ -1,6 +1,6 @@
 {
-  "Meta Data:" : {
-    "2: Symbol": "GOOGL"
+  "Meta Data" : {
+    "2. Symbol": "GOOGL"
   },
   "Time Series (Daily)": {
     "2020-01-29": {
@@ -21,12 +21,12 @@
     "2020-01-24": {
       "1. open": "80.5000",
       "4. close": "14.0000",
-      "derivative": -10.0
+      "derivative": -10.166666666666666
     },
     "2020-01-23": {
       "1. open": "100.0000",
       "4. close": "1484.0000",
-      "derivative": -20.0
+      "derivative": -19.5
     },
     "2020-01-22": {
       "1. open": "200.0000",

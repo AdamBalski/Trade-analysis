@@ -13,9 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StockPricesTest {
-    JSONObject google1Day;
-    JSONObject expectedMetaData;
-    JSONObject expectedTimeSeries;
+    private JSONObject google1Day;
+    private JSONObject expectedMetaData;
+    private JSONObject expectedTimeSeries;
+
+    private JSONObject simple;
+    private JSONObject simpleFinalState;
 
     @BeforeEach
     void init() throws IOException {
@@ -28,6 +31,13 @@ public class StockPricesTest {
         expectedTimeSeries =
                 new File("src/test/resources/examples of alpha vantage results/googl-1day-timeseries")
                 .getFileAsJSONObject();
+
+        simple =
+                new File("src/test/resources/examples of alpha vantage results/simple")
+                        .getFileAsJSONObject();
+        simpleFinalState =
+                new File("src/test/resources/examples of alpha vantage results/simple-final-json")
+                        .getFileAsJSONObject();
     }
 
     @Test
@@ -83,5 +93,12 @@ public class StockPricesTest {
         StockPrices stockPrices = new StockPrices(jsonObject);
 
         assertEquals(DAILY, stockPrices.getPeriod());
+    }
+
+    @Test
+    void testFinalJSON() {
+        StockPrices stockPrices = new StockPrices(simple);
+
+        assertTrue(simpleFinalState.similar(stockPrices.getFinalJSON()));
     }
 }
