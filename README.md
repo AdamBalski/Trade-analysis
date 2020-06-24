@@ -1,4 +1,4 @@
-#Tool for trade analysis
+# Tool for trade analysis
 
 #### Description
 It provides simple analysis of the stock market, but you have to give the alpha vantage api key.
