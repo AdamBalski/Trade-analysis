@@ -14,7 +14,8 @@ import java.util.UUID;
 
 import static com.trade_analysis.model.UserRole.USUAL;
 
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "user", schema = "public")
 public class User {
@@ -38,6 +39,9 @@ public class User {
     @Column(name = "api_key", columnDefinition = "varchar(20)")
     private String apiKey;
 
+    @Column(name = "email_verified", columnDefinition = "boolean")
+    private boolean emailVerified;
+
     public static User valueOf(UserSignUpDto userSignUpDto) {
         String password = new BCryptPasswordEncoder(10).encode(userSignUpDto.getPassword1());
 
@@ -46,7 +50,8 @@ public class User {
                 userSignUpDto.getEmail(),
                 password,
                 USUAL,
-                null);
+                null,
+                false);
     }
 
     public List<GrantedAuthority> getGrantedAuthorities() {

@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-@Builder
 @AllArgsConstructor
+@Builder
 public class UserSignUpDto {
     private String username;
     private String email;

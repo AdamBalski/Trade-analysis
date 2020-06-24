@@ -83,20 +83,12 @@ public class StockPrices {
         return raw.getJSONObject("Meta Data");
     }
 
-    private static JSONObject addDerivatives(StockPrices stockPrices) {
-        DateTimeFormatter formatter = switch(stockPrices.period) {
-            case DAILY -> DATE_FORMATTER;
-            case HOUR_PERIOD, FIVE_MINUTES_PERIOD -> DateUtil.DATE_TIME_FORMATTER;
-        };
+    private static JSONObject addDerivatives(StockPrices stockPrices) { // todo add cases to test
+        DateTimeFormatter formatter = getDateTimeFormatter(stockPrices);
         Duration duration = stockPrices.period.duration;
 
-        Function<String, LocalDateTime> parseToDate = string -> {
-            if(stockPrices.period == DAILY) {
-                return LocalDate.parse(string, formatter).atStartOfDay();
-            }
-            return LocalDateTime.parse(string, formatter);
-        };
-        Function<LocalDateTime, String> parseToString = date -> date.format(formatter);
+        Function<String, LocalDateTime> parseToDate = getParseStringToDate(stockPrices, formatter);
+        Function<LocalDateTime, String> parseToString = getParseDateToString(formatter);
 
         JSONObject timeSeries = stockPrices.timeSeries;
 
@@ -105,6 +97,8 @@ public class StockPrices {
                 .stream()
                 .map(parseToDate)
                 .sorted().collect(Collectors.toCollection(ArrayList::new));
+
+        double lastDerivative = 0;
 
         for(int i = 0; i < dates.size() - 1; i++) {
             Duration difference = between(dates.get(i), dates.get(i + 1));
@@ -117,30 +111,53 @@ public class StockPrices {
             double moneyEnd = timeSeries.getJSONObject(date2).getDouble("1. open");
 
             double derivative = (moneyEnd - moneyStart) / unitAmount;
+            lastDerivative = derivative;
 
-            //noinspection unchecked todo refaktoring
+            //noinspection unchecked
             ((HashMap<String, Object>) map.get(date1)).put("derivative", derivative);
         }
 
-        if(dates.size() == 1) {
-            //noinspection unchecked todo refaktoring
-            ((HashMap<String, Object>) map.get(parseToString.apply(dates.get(dates.size() - 1)))).put("derivative", 0);
-        }
-        if(dates.size() > 1) {
-            //noinspection unchecked todo refaktoring
-            ((HashMap<String, Object>) map.get(parseToString.apply(dates.get(dates.size() - 1)))).put("derivative", ((HashMap<String, Object>) map.get(parseToString.apply(dates.get(dates.size() - 2)))).get("derivative"));
+        if(map.size() > 0) {
+            String lastDate = parseToString.apply(dates.get(dates.size() - 1));
+
+            //noinspection unchecked
+            ((HashMap<String, Object>) map.get(lastDate)).put("derivative", lastDerivative);
         }
 
         JSONObject result = new JSONObject();
 
         result.put("Meta Data", stockPrices.metaData);
-        String timeSeriesLabel = switch(stockPrices.period) {
+        String timeSeriesLabel = getTimeSeriesLabel(stockPrices);
+        result.put(timeSeriesLabel, map);
+
+        return result;
+    }
+
+    private static String getTimeSeriesLabel(StockPrices stockPrices) {
+        return switch(stockPrices.period) {
             case DAILY -> "Time Series (Daily)";
             case HOUR_PERIOD -> "Time Series (60min)";
             case FIVE_MINUTES_PERIOD -> "Time Series (5min)";
         };
-        result.put(timeSeriesLabel, map);
+    }
 
-        return result;
+    private static DateTimeFormatter getDateTimeFormatter(StockPrices stockPrices) {
+        return switch(stockPrices.period) {
+                case DAILY -> DATE_FORMATTER;
+                case HOUR_PERIOD, FIVE_MINUTES_PERIOD -> DateUtil.DATE_TIME_FORMATTER;
+            };
+    }
+
+    private static Function<LocalDateTime, String> getParseDateToString(DateTimeFormatter formatter) {
+        return date -> date.format(formatter);
+    }
+
+    private static Function<String, LocalDateTime> getParseStringToDate(StockPrices stockPrices, DateTimeFormatter formatter) {
+        return string -> {
+                if(stockPrices.period == DAILY) {
+                    return LocalDate.parse(string, formatter).atStartOfDay();
+                }
+                return LocalDateTime.parse(string, formatter);
+            };
     }
 }

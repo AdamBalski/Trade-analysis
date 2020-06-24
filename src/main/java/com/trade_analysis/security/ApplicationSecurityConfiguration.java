@@ -1,5 +1,6 @@
 package com.trade_analysis.security;
 
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +25,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
     @Bean(value = "userDetailsService")
-    @Override protected UserDetailsService userDetailsService() {
+    @Override
+    protected UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
     }
 
-    @Override protected void configure(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/me").permitAll()
@@ -42,12 +45,9 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 }
 
+@NoArgsConstructor
 @Component
 class PasswordEncoderFactory {
-    public PasswordEncoderFactory() {
-
-    }
-
     @Bean(value = "passwordEncoder")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);

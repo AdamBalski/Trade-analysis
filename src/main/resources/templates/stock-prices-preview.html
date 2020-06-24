@@ -13,7 +13,7 @@
     <!--	frontend dev-->
     <link rel ="stylesheet" href="../static/css/navbar.css">
     <link rel ="stylesheet" href="../static/css/main.css">
-    <!--	/ frontend dev-->
+    <!--	/frontend dev-->
 
     <style>
         .main {
@@ -80,10 +80,13 @@
         </div>
 
         <div class="container-fluid" id="result-wrapper">
-            <span id="result"></span>
+            <div id="result">
+                <div id="main-chart" style="width: 900px; height: 500px"></div>
+            </div>
         </div>
     </div>
 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         let apiKey = '[[${stockQueryDto.getApiKey()}]]';
 
@@ -92,8 +95,29 @@
 
         let result = '[[${result}]]';
 
-        document.getElementById('result').innerHTML = result;
-    </script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+            ['Date', 'Prices'],
+            ['2004',  1000],
+            ['2005',  1170],
+            ['2006',  660],
+            ['2007',  1030]
+            ]);
+
+            var options = {
+            title: 'Main chart',
+            curveType: 'none',
+            legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('main-chart'));
+
+            chart.draw(data, options);
+        }
+        </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

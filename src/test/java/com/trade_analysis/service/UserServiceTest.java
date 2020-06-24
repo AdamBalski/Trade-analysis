@@ -1,9 +1,12 @@
 package com.trade_analysis.service;
 
+import com.trade_analysis.dao.EmailVerificationTokenDbDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
+import com.trade_analysis.exception.EmailVerificationTokenNotFoundException;
 import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.logs.Logger;
+import com.trade_analysis.model.EmailVerificationToken;
 import com.trade_analysis.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.persistence.NonUniqueResultException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +35,8 @@ public class UserServiceTest {
     Logger logger;
     @Mock
     UserDbDao userDbDao;
+    @Mock
+    EmailVerificationTokenDbDao emailVerificationTokenDbDao;
 
     private List<User> users;
     private UserSignUpDto userSignUpDto;
@@ -44,13 +47,13 @@ public class UserServiceTest {
 
         users = of(
                 new User(UUID.fromString("fd91c269-ab5c-4f8a-907a-e7f044239781"), "username3", "username3@email.com",
-                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "3QP33URO6DL3OPTC"),
+                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "3QP33URO6DL3OPTC", false),
 
                 new User(UUID.fromString("48ee79d6-3350-4ab4-a33f-f176051741e4"), "username4", "username4@email.com",
-                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL, null),
+                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL, null, true),
 
                 new User(UUID.fromString("1a0c1f7e-9b6d-44cd-80c2-bb166f29f082"), "username5", "username5@email.com",
-                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN, "EBCXTDAT5J280GRL"));
+                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN, "EBCXTDAT5J280GRL", true));
 
         userSignUpDto = new UserSignUpDto("username", "email@email.com", "password1", "password2");
     }
@@ -67,34 +70,16 @@ public class UserServiceTest {
         } catch (UserNotFoundException e) {
             fail("testGetUserByUsername failed. UserNotFoundException was thrown although mock object returns 'full' optional.");
         }
-
-        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
-    void testGetUserByUsernameWhenOccursMoreThanOnce() {
-        User user = users.get(0);
-        String username = user.getUsername();
-
-        when(userDbDao.getSingleResultByUsername(username)).thenThrow(new NonUniqueResultException(""));
-
-        Executable executable = () -> userService.getUserByUsername(username);
-        assertThrows(UsernameNotFoundException.class, executable);
-
-        verify(logger).save(any(Class.class), any(Exception.class));
-    }
-
-    @Test
-    void testFindUserByUsernameWhenUserDoesNotExist() {
-        User user = users.get(0);
-        String username = user.getUsername();
+    void testGetUserByUsernameWhenUserDoesNotExist() {
+        String username = "username";
 
         when(userDbDao.getSingleResultByUsername(username)).thenReturn(Optional.empty());
 
         Executable executable = () -> userService.getUserByUsername(username);
         assertThrows(UserNotFoundException.class, executable);
-
-        verify(logger, never()).save(any(Class.class), any(Exception.class));
     }
 
     @Test
@@ -145,17 +130,6 @@ public class UserServiceTest {
     }
 
     @Test
-    void testFindUserByIdWhenOccursMoreThanOnce() {
-        User user = users.get(0);
-        UUID id = user.getId();
-
-        when(userDbDao.getSingleResultById(id)).thenThrow(new NonUniqueResultException());
-
-        Executable executable = () -> userService.findUserById(id);
-        assertThrows(NonUniqueResultException.class, executable);
-    }
-
-    @Test
     void testFindUserByIdWhenUserDoesNotExist() {
         User user = users.get(0);
         UUID id = user.getId();
@@ -181,6 +155,48 @@ public class UserServiceTest {
         };
 
         assertThrows(DataIntegrityViolationException.class, signUpExecutable);
+    }
+
+    @Test
+    void testGetEmailVerificationTokenByUUID() {
+        UUID uuid = UUID.fromString("b0055770-bdda-434e-890d-5f9e445ff267");
+        User user = users.get(0);
+
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken(uuid, user);
+
+        when(emailVerificationTokenDbDao.getSingleResultById(uuid))
+                .thenReturn(Optional.of(emailVerificationToken));
+
+        try {
+            assertEquals(emailVerificationToken, userService.getEmailVerificationToken(uuid));
+        } catch (EmailVerificationTokenNotFoundException e) {
+            fail("testGetEmailVerificationTokenByUUID failed. " +
+                    "EmailVerificationTokenNotFoundException was thrown although " +
+                    "mock object returns 'full' optional.");
+        }
+    }
+
+    @Test
+    void testGetEmailVerificationTokenByUUIDWhenItDoesNotExist() {
+        UUID uuid = UUID.fromString("b0055770-bdda-434e-890d-5f9e445ff267");
+        User user = users.get(0);
+
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken(uuid, user);
+
+        when(emailVerificationTokenDbDao.getSingleResultById(uuid))
+                .thenReturn(Optional.empty());
+
+        Executable executable = () -> userService.getEmailVerificationToken(uuid);
+        assertThrows(EmailVerificationTokenNotFoundException.class, executable);
+    }
+
+    @Test
+    void testDeleteEmailVerificationToken() {
+        UUID uuid = UUID.fromString("b0055770-bdda-434e-890d-5f9e445ff267");
+
+        userService.deleteEmailVerificationToken(uuid);
+
+        verify(emailVerificationTokenDbDao).deleteById(uuid);
     }
 
     @Test

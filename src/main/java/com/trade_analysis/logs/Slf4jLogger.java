@@ -22,6 +22,6 @@ public class Slf4jLogger implements Logger {
 
     @Override
     public void emptyLine(Class c) {
-        LoggerFactory.getLogger(c).info("EmptyLine\n");
+        LoggerFactory.getLogger(c).info("\n");
     }
 }
