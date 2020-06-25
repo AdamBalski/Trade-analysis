@@ -101,4 +101,58 @@ public class StockPricesTest {
 
         assertTrue(simpleFinalState.similar(stockPrices.getFinalJSON()));
     }
+
+    @Test
+    void testFinalJSONWithOneTimeSeriesChildren() {
+        JSONObject raw = new JSONObject(
+                "{" +
+                        "    'Meta Data': {" +
+                        "        '2. Symbol': 'GOOGL'" +
+                        "    }," +
+                        "    'Time Series (60min)': {" +
+                        "        '2020-06-12 15:30:00': {" +
+                        "            '1. open': '0.0'," +
+                        "            '4. close': '0.0'" +
+                        "         }" +
+                        "    }" +
+                        "}"
+        );
+        StockPrices stockPrices = new StockPrices(raw);
+
+        JSONObject expected = new JSONObject(
+                "{" +
+                        "    'Meta Data': {" +
+                        "        '2. Symbol': 'GOOGL'" +
+                        "    }," +
+                        "    'Time Series (60min)': {" +
+                        "        '2020-06-12 15:30:00': {" +
+                        "            '1. open': '0.0'," +
+                        "            '4. close': '0.0'," +
+                        "            'derivative': 0.0" +
+                        "         }" +
+                        "    }" +
+                        "}"
+        );
+
+        System.out.println(expected);
+        System.out.println(raw);
+
+        assertTrue(expected.similar(stockPrices.getFinalJSON()));
+    }
+
+    @Test
+    void testFinalJSONWithEmptyTimeSeries() {
+        JSONObject raw = new JSONObject(
+                        "{" +
+                                "    'Meta Data': {" +
+                                "        '2. Symbol': 'GOOGL'" +
+                                "    }," +
+                                "    'Time Series (5min)': {" +
+                                "    }" +
+                                "}"
+        );
+        StockPrices stockPrices = new StockPrices(raw);
+
+        assertTrue(raw.similar(stockPrices.getFinalJSON()));
+    }
 }
