@@ -2,7 +2,6 @@ package com.trade_analysis.model;
 
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 public enum StockSymbol {
-    GOOGL("GOOGL"),
     MSFT("MSFT"),
     AMZN("AMZN"),
     IBM("IBM"),

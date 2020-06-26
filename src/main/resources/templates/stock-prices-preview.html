@@ -36,6 +36,9 @@
         #stock-form {
             height: 100% !important;
         }
+        .chart {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -75,50 +78,33 @@
             <button class="form-item" type="submit"> Show </button>
         </form>
 
-        <div class="container-fluid" id="error-info">
+        <div class="container-fluid row">
             <span th:text="${info}"></span>
         </div>
 
-        <div class="container-fluid" id="result-wrapper">
-            <div id="result">
-                <div id="main-chart" style="width: 900px; height: 500px"></div>
-            </div>
+        <div th:if="${error != null}" class="container-fluid row col-9">
+            <div class="alert alert-danger" th:text="${error}" role="alert"></div>
+        </div>
+
+        <div class="container-fluid row col-12 col-md-11 col-lg-10" id="result-wrapper">
+            <div class="chart" id="main-chart"></div>
+            <div class="chart" id="derivatives-chart" style = "margin-top: 10px;"></div>
         </div>
     </div>
 
+    <script type="text/javascript" src="js/util.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         let apiKey = '[[${stockQueryDto.getApiKey()}]]';
+        var finalJSON = '[[${stockPrices == null ? "" : stockPrices.finalJSON}]]';
+        var timeSeriesLabel = '[[${stockPrices == null ? "" : stockPrices.timeSeriesLabel}]]';
+
+        finalJSON = JSON.parse(replaceAll(finalJSON, "&quot;", "\""));
 
         document.getElementById('api-key-field').value = apiKey;
         document.getElementById('default-symbol').selected = 'selected';
-
-        let result = '[[${result}]]';
-
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-            ['Date', 'Prices'],
-            ['2004',  1000],
-            ['2005',  1170],
-            ['2006',  660],
-            ['2007',  1030]
-            ]);
-
-            var options = {
-            title: 'Main chart',
-            curveType: 'none',
-            legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('main-chart'));
-
-            chart.draw(data, options);
-        }
-        </script>
-
+    </script>
+    <script th:if="${error == null}" type="text/javascript" src="js/stock-prices-preview.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

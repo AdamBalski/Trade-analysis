@@ -3,13 +3,18 @@ package com.trade_analysis.controller;
 import com.trade_analysis.dtos.StockQueryDto;
 import com.trade_analysis.dtos_validation.StockQueryValidationResult;
 import com.trade_analysis.dtos_validation.StockQueryValidator;
+import com.trade_analysis.exception.InvalidApiCallException;
+import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.exception.UserNotFoundException;
+import com.trade_analysis.logs.Logger;
+import com.trade_analysis.model.StockPrices;
 import com.trade_analysis.model.StockPricesPeriod;
 import com.trade_analysis.model.StockSymbol;
 import com.trade_analysis.model.User;
 import com.trade_analysis.service.StockMarketService;
 import com.trade_analysis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +33,10 @@ public class StockPriceController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    @Qualifier("slf4jLogger")
+    Logger logger;
 
     @GetMapping(value = "/stocks")
     @PreAuthorize(value = "isAuthenticated()")
@@ -56,7 +65,18 @@ public class StockPriceController {
             model.addAttribute("info", validationResult);
         }
         else {
-            model.addAttribute("result", stockMarketService.getFromStockQueryDto(stockQueryDto));
+            StockPrices stockPrices = null;
+
+            try {
+                stockPrices = stockMarketService.getStockPricesFromStockQueryDto(stockQueryDto);
+            } catch (TooManyApiCallsException e) {
+                model.addAttribute("error", "You used too many api calls in the near past.");
+            } catch (InvalidApiCallException e) {
+                logger.save(StockPriceController.class, e);
+
+                model.addAttribute("error",  e.getMessage() + " Report it to our team if you're able too.");
+            }
+            model.addAttribute("stockPrices", stockPrices);
         }
         return "stock-prices-preview";
     }

@@ -1,19 +1,21 @@
 package com.trade_analysis.model;
 
+import com.trade_analysis.exception.InvalidApiCallException;
+import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.util.File;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 
 import static com.trade_analysis.model.StockPricesPeriod.*;
-import static com.trade_analysis.model.StockSymbol.GOOGL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.trade_analysis.model.StockSymbol.AMZN;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StockPricesTest {
-    private JSONObject google1Day;
+    private JSONObject AMZNe1Day;
     private JSONObject expectedMetaData;
     private JSONObject expectedTimeSeries;
 
@@ -22,14 +24,14 @@ public class StockPricesTest {
 
     @BeforeEach
     void init() throws IOException {
-        google1Day =
-                new File("src/test/resources/examples of alpha vantage results/googl-1day")
+        AMZNe1Day =
+                new File("src/test/resources/examples of alpha vantage results/amzn-1day")
                 .getFileAsJSONObject();
         expectedMetaData =
-                new File("src/test/resources/examples of alpha vantage results/googl-1day-metadata")
+                new File("src/test/resources/examples of alpha vantage results/amzn-1day-metadata")
                 .getFileAsJSONObject();
         expectedTimeSeries =
-                new File("src/test/resources/examples of alpha vantage results/googl-1day-timeseries")
+                new File("src/test/resources/examples of alpha vantage results/amzn-1day-timeseries")
                 .getFileAsJSONObject();
 
         simple =
@@ -41,73 +43,110 @@ public class StockPricesTest {
     }
 
     @Test
-    void testOnlyJsonConstructor() {
-        StockPrices stockPrices = new StockPrices(google1Day);
+    void testOnlyJsonConstructor() throws InvalidApiCallException, TooManyApiCallsException {
+        StockPrices stockPrices = new StockPrices(AMZNe1Day);
 
-        assertEquals(google1Day, stockPrices.getRaw());
-        assertEquals(GOOGL, stockPrices.getSymbol());
+        assertEquals(AMZNe1Day, stockPrices.getRaw());
+        assertEquals(AMZN, stockPrices.getSymbol());
         assertEquals(DAILY, stockPrices.getPeriod());
+        assertEquals("Time Series (Daily)", stockPrices.getTimeSeriesLabel());
         assertTrue(expectedMetaData.similar(stockPrices.getMetaData()));
         assertTrue(expectedTimeSeries.similar(stockPrices.getTimeSeries()));
     }
 
     @Test
-    void testJsonSymbolAndPeriodConstructor() {
-        StockPrices stockPrices = new StockPrices(google1Day, GOOGL, DAILY);
+    void testOnlyJsonConstructorThatShouldThrowInvalidApiCallException() {
+        JSONObject raw = new JSONObject("{'Error Message': ''}");
 
-        assertEquals(google1Day, stockPrices.getRaw());
-        assertEquals(GOOGL, stockPrices.getSymbol());
+        Executable executable = () -> new StockPrices(raw);
+        assertThrows(InvalidApiCallException.class, executable);
+    }
+
+    @Test
+    void testOnlyJsonConstructorThatShouldThrowTooManyApiCallsException() {
+        JSONObject raw = new JSONObject("{'Note': ''}");
+
+        Executable executable = () -> new StockPrices(raw);
+        assertThrows(TooManyApiCallsException.class, executable);
+    }
+
+    @Test
+    void testJsonSymbolAndPeriodConstructor() throws InvalidApiCallException, TooManyApiCallsException {
+        StockPrices stockPrices = new StockPrices(AMZNe1Day, AMZN, DAILY);
+
+        assertEquals(AMZNe1Day, stockPrices.getRaw());
+        assertEquals(AMZN, stockPrices.getSymbol());
         assertEquals(DAILY, stockPrices.getPeriod());
+        assertEquals("Time Series (Daily)", stockPrices.getTimeSeriesLabel());
         assertTrue(expectedMetaData.similar(stockPrices.getMetaData()));
         assertTrue(expectedTimeSeries.similar(stockPrices.getTimeSeries()));
     }
 
     @Test
-    void testConstructorWith5minPeriod() {
+    void testJsonSymbolAndPeriodConstructorThatShouldThrowInvalidApiCallException() {
+        JSONObject raw = new JSONObject("{'Error Message': ''}");
+
+        Executable executable = () -> new StockPrices(raw, AMZN, DAILY);
+        assertThrows(InvalidApiCallException.class, executable);
+    }
+
+    @Test
+    void testJsonSymbolAndPeriodConstructorThatShouldThrowTooManyApiCallslException() {
+        JSONObject raw = new JSONObject("{'Note': ''}");
+
+        Executable executable = () -> new StockPrices(raw, AMZN, DAILY);
+        assertThrows(TooManyApiCallsException.class, executable);
+    }
+
+    @Test
+    void testConstructorWith5minPeriod() throws InvalidApiCallException, TooManyApiCallsException {
         var json =  "{'Time Series (5min)': {}, " +
-                "'Meta Data': {'2. Symbol': 'GOOGL'}}";
+                "'Meta Data': {'2. Symbol': 'AMZN'}}";
 
         var jsonObject = new JSONObject(json);
         StockPrices stockPrices = new StockPrices(jsonObject);
 
+        assertEquals("Time Series (5min)", stockPrices.getTimeSeriesLabel());
         assertEquals(FIVE_MINUTES_PERIOD, stockPrices.getPeriod());
     }
 
     @Test
-    void testConstructorWithHourPeriod() {
+    void testConstructorWithHourPeriod() throws InvalidApiCallException, TooManyApiCallsException {
         var json =  "{'Time Series (60min)': {}, " +
-                "'Meta Data': {'2. Symbol': 'GOOGL'}}";
+                "'Meta Data': {'2. Symbol': 'AMZN'}}";
 
         var jsonObject = new JSONObject(json);
         StockPrices stockPrices = new StockPrices(jsonObject);
 
+        assertEquals("Time Series (60min)", stockPrices.getTimeSeriesLabel());
         assertEquals(HOUR_PERIOD, stockPrices.getPeriod());
     }
 
     @Test
-    void testConstructorWithDailyPeriod() {
+    void testConstructorWithDailyPeriod() throws InvalidApiCallException, TooManyApiCallsException {
         var json =  "{'Time Series (Daily)': {}, " +
-                    "'Meta Data': {'2. Symbol': 'GOOGL'}}";
+                    "'Meta Data': {'2. Symbol': 'AMZN'}}";
 
         var jsonObject = new JSONObject(json);
         StockPrices stockPrices = new StockPrices(jsonObject);
 
+        assertEquals("Time Series (Daily)", stockPrices.getTimeSeriesLabel());
         assertEquals(DAILY, stockPrices.getPeriod());
     }
 
     @Test
-    void testFinalJSON() {
+    void testFinalJSON() throws InvalidApiCallException, TooManyApiCallsException {
         StockPrices stockPrices = new StockPrices(simple);
 
         assertTrue(simpleFinalState.similar(stockPrices.getFinalJSON()));
     }
 
     @Test
-    void testFinalJSONWithOneTimeSeriesChildren() {
+    void testFinalJSONWithOneTimeSeriesChildren() throws InvalidApiCallException, TooManyApiCallsException {
         JSONObject raw = new JSONObject(
                 "{" +
                         "    'Meta Data': {" +
-                        "        '2. Symbol': 'GOOGL'" +
+                        "        '2. Symbol': 'AMZN'" +
                         "    }," +
                         "    'Time Series (60min)': {" +
                         "        '2020-06-12 15:30:00': {" +
@@ -122,7 +161,7 @@ public class StockPricesTest {
         JSONObject expected = new JSONObject(
                 "{" +
                         "    'Meta Data': {" +
-                        "        '2. Symbol': 'GOOGL'" +
+                        "        '2. Symbol': 'AMZN'" +
                         "    }," +
                         "    'Time Series (60min)': {" +
                         "        '2020-06-12 15:30:00': {" +
@@ -141,11 +180,11 @@ public class StockPricesTest {
     }
 
     @Test
-    void testFinalJSONWithEmptyTimeSeries() {
+    void testFinalJSONWithEmptyTimeSeries() throws InvalidApiCallException, TooManyApiCallsException {
         JSONObject raw = new JSONObject(
                         "{" +
                                 "    'Meta Data': {" +
-                                "        '2. Symbol': 'GOOGL'" +
+                                "        '2. Symbol': 'AMZN'" +
                                 "    }," +
                                 "    'Time Series (5min)': {" +
                                 "    }" +

@@ -8,9 +8,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 public class StockQueryValidatorTest {
     @ParameterizedTest
     @CsvSource(value = {
-            "'GOOGL', 'DAILY', SUCCESS",
+            "'AMZN', 'DAILY', SUCCESS",
             "'NOT_SYMBOL', 'DAILY', SYMBOL_NOT_CORRECT",
-            "'GOOGL', 'NOT_PERIOD', PERIOD_NOT_CORRECT",
+            "'MSFT', 'NOT_PERIOD', PERIOD_NOT_CORRECT",
             "'NOT_SYMBOL', 'NOT_PERIOD', SYMBOL_NOT_CORRECT"
     })
     void testFullValidator(String symbol, String period, StockQueryValidationResult expected) {
@@ -27,7 +27,7 @@ public class StockQueryValidatorTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "'GOOGL', SUCCESS",
+            "'AMZN', SUCCESS",
             "'NOT_SYMBOL', SYMBOL_NOT_CORRECT"
     })
     void testSymbolValidator(String symbol, StockQueryValidationResult expected) {

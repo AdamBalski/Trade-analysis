@@ -1,5 +1,7 @@
 package com.trade_analysis.model;
 
+import com.trade_analysis.exception.InvalidApiCallException;
+import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.util.DateUtil;
 import lombok.Getter;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,35 +29,47 @@ public class StockPrices {
     private final JSONObject finalJSON;
     private final JSONObject metaData;
     private final JSONObject timeSeries;
+    private final String timeSeriesLabel;
 
-    public StockPrices(JSONObject raw) {
+    public StockPrices(JSONObject raw) throws InvalidApiCallException, TooManyApiCallsException {
+        StockResponseStatus.valueOf(raw).throwException();
+
         this.raw = raw;
         period = StockPrices.getPeriod(raw);
         metaData = StockPrices.getMetaData(raw);
         symbol = StockPrices.getSymbol(raw);
-        timeSeries = StockPrices.getTimeSeries(raw);
+        timeSeriesLabel = StockPrices.getTimeSeriesLabel(raw);
+        timeSeries = StockPrices.getTimeSeries(raw, timeSeriesLabel);
         finalJSON = addDerivatives(this);
     }
 
-    public StockPrices(JSONObject raw, StockSymbol symbol, StockPricesPeriod period) {
+    public StockPrices(JSONObject raw,
+                       StockSymbol symbol,
+                       StockPricesPeriod period)
+            throws InvalidApiCallException, TooManyApiCallsException {
+        StockResponseStatus.valueOf(raw).throwException();
+
         this.raw = raw;
         this.symbol = symbol;
         this.period = period;
         metaData = StockPrices.getMetaData(raw);
-        timeSeries = StockPrices.getTimeSeries(raw);
+        timeSeriesLabel = StockPrices.getTimeSeriesLabel(raw);
+        timeSeries = StockPrices.getTimeSeries(raw, timeSeriesLabel);
         finalJSON = addDerivatives(this);
     }
 
-    private static JSONObject getTimeSeries(JSONObject raw) throws IllegalStateException {
+    private static String getTimeSeriesLabel(JSONObject raw) throws IllegalStateException{
         for (String key : raw.keySet()) {
             if(key.startsWith("Time Series")) {
-                return raw.getJSONObject(key);
+                return key;
             }
         }
 
-        throw new IllegalStateException(
-                        "There is no time series in JSON represantation of stock prices: " +
-                        raw.toString());
+        throw new IllegalStateException("There is no time series in JSON representation of those stock prices: " + raw.toString());
+    }
+
+    private static JSONObject getTimeSeries(JSONObject raw, String timeSeriesLabel) throws IllegalStateException {
+        return raw.getJSONObject(timeSeriesLabel);
     }
 
     private static StockSymbol getSymbol(JSONObject raw) {
@@ -160,4 +175,21 @@ public class StockPrices {
                 return LocalDateTime.parse(string, formatter);
             };
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StockPrices)) return false;
+
+        StockPrices that = (StockPrices) o;
+
+        if (symbol != that.symbol) return false;
+        if (period != that.period) return false;
+        if (raw != null ? !raw.similar(that.raw) : that.raw != null) return false;
+        if (finalJSON != null ? !finalJSON.similar(that.finalJSON) : that.finalJSON != null) return false;
+        if (metaData != null ? !metaData.similar(that.metaData) : that.metaData != null) return false;
+        if (timeSeries != null ? !timeSeries.similar(that.timeSeries) : that.timeSeries != null) return false;
+        return Objects.equals(timeSeriesLabel, that.timeSeriesLabel);
+    }
+
 }

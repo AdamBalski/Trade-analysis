@@ -2,6 +2,9 @@ package com.trade_analysis.service;
 
 import com.trade_analysis.dao.StockMarketDao;
 import com.trade_analysis.dtos.StockQueryDto;
+import com.trade_analysis.exception.InvalidApiCallException;
+import com.trade_analysis.exception.TooManyApiCallsException;
+import com.trade_analysis.model.StockPrices;
 import com.trade_analysis.model.StockPricesPeriod;
 import com.trade_analysis.model.StockSymbol;
 import org.json.JSONObject;
@@ -13,7 +16,11 @@ public class StockMarketService {
     @Autowired
     private StockMarketDao stockMarketDao;
 
-    public JSONObject getFromStockQueryDto(StockQueryDto stockQueryDto) {
+    public StockPrices getStockPricesFromStockQueryDto(StockQueryDto stockQueryDto) throws InvalidApiCallException, TooManyApiCallsException {
+        return new StockPrices(getRawFromStockQueryDto(stockQueryDto));
+    }
+
+    public JSONObject getRawFromStockQueryDto(StockQueryDto stockQueryDto) {
         StockPricesPeriod period = StockPricesPeriod.valueOf(stockQueryDto.getPeriod());
         String apiKey = stockQueryDto.getApiKey();
         StockSymbol symbol = StockSymbol.valueOf(stockQueryDto.getSymbol());
