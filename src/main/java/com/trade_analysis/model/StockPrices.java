@@ -98,7 +98,7 @@ public class StockPrices {
         return raw.getJSONObject("Meta Data");
     }
 
-    private static JSONObject addDerivatives(StockPrices stockPrices) { // todo add cases to test
+    private static JSONObject addDerivatives(StockPrices stockPrices) {
         DateTimeFormatter formatter = getDateTimeFormatter(stockPrices);
         Duration duration = stockPrices.period.duration;
 
@@ -177,7 +177,7 @@ public class StockPrices {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) { // todo test
         if (this == o) return true;
         if (!(o instanceof StockPrices)) return false;
 

@@ -9,22 +9,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.trade_analysis.model.StockPricesPeriod.*;
 import static com.trade_analysis.model.StockSymbol.AMZN;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StockPricesTest {
-    private JSONObject AMZNe1Day;
+    private JSONObject amznDailyRaw;
     private JSONObject expectedMetaData;
     private JSONObject expectedTimeSeries;
 
     private JSONObject simple;
     private JSONObject simpleFinalState;
 
+    private StockPrices amznDaily;
+
     @BeforeEach
     void init() throws IOException {
-        AMZNe1Day =
+        amznDailyRaw =
                 new File("src/test/resources/examples of alpha vantage results/amzn-1day")
                 .getFileAsJSONObject();
         expectedMetaData =
@@ -40,13 +43,20 @@ public class StockPricesTest {
         simpleFinalState =
                 new File("src/test/resources/examples of alpha vantage results/simple-final-json")
                         .getFileAsJSONObject();
+
+        try {
+            amznDaily = new StockPrices(amznDailyRaw);
+        } catch (InvalidApiCallException | TooManyApiCallsException e) {
+            fail(e);
+            e.printStackTrace();
+        }
     }
 
     @Test
     void testOnlyJsonConstructor() throws InvalidApiCallException, TooManyApiCallsException {
-        StockPrices stockPrices = new StockPrices(AMZNe1Day);
+        StockPrices stockPrices = new StockPrices(amznDailyRaw);
 
-        assertEquals(AMZNe1Day, stockPrices.getRaw());
+        assertEquals(amznDailyRaw, stockPrices.getRaw());
         assertEquals(AMZN, stockPrices.getSymbol());
         assertEquals(DAILY, stockPrices.getPeriod());
         assertEquals("Time Series (Daily)", stockPrices.getTimeSeriesLabel());
@@ -72,9 +82,9 @@ public class StockPricesTest {
 
     @Test
     void testJsonSymbolAndPeriodConstructor() throws InvalidApiCallException, TooManyApiCallsException {
-        StockPrices stockPrices = new StockPrices(AMZNe1Day, AMZN, DAILY);
+        StockPrices stockPrices = new StockPrices(amznDailyRaw, AMZN, DAILY);
 
-        assertEquals(AMZNe1Day, stockPrices.getRaw());
+        assertEquals(amznDailyRaw, stockPrices.getRaw());
         assertEquals(AMZN, stockPrices.getSymbol());
         assertEquals(DAILY, stockPrices.getPeriod());
         assertEquals("Time Series (Daily)", stockPrices.getTimeSeriesLabel());
@@ -193,5 +203,57 @@ public class StockPricesTest {
         StockPrices stockPrices = new StockPrices(raw);
 
         assertTrue(raw.similar(stockPrices.getFinalJSON()));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertNotEquals(amznDaily, null);
+    }
+
+    @Test
+    void testEqualsWithNotStockPrices() {
+        assertNotEquals(amznDaily, new ArrayList<>());
+    }
+
+    @Test
+    void testEqualsWithItself() {
+        assertEquals(amznDaily, amznDaily);
+    }
+
+    @Test
+    void testEqualsThatShouldReturnTrue() {
+        try {
+            assertEquals(amznDaily, new StockPrices(amznDailyRaw, AMZN, DAILY));
+        } catch (InvalidApiCallException | TooManyApiCallsException e) {
+            fail(e);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testEqualsThatShouldReturnFalse() {
+        JSONObject raw = new JSONObject(
+                "{" +
+                        "    'Meta Data': {" +
+                        "        '2. Symbol': 'AMZN'" +
+                        "    }," +
+                        "    'Time Series (60min)': {" +
+                        "        '2020-06-12 15:30:00': {" +
+                        "            '1. open': '0.0'," +
+                        "            '4. close': '0.0'," +
+                        "            'derivative': 0.0" +
+                        "         }" +
+                        "    }" +
+                        "}"
+        );
+        StockPrices stockPrices = null;
+
+        try {
+            stockPrices = new StockPrices(raw);
+        } catch (InvalidApiCallException | TooManyApiCallsException e) {
+            fail(e);
+            e.printStackTrace();
+        }
+        assertNotEquals(stockPrices, amznDaily);
     }
 }
