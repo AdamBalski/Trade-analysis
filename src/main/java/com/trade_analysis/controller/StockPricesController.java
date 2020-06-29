@@ -27,7 +27,7 @@ import static com.trade_analysis.dtos_validation.StockQueryValidationResult.SUCC
 import static java.util.Arrays.asList;
 
 @Controller
-public class StockPriceController {
+public class StockPricesController {
     @Autowired
     StockMarketService stockMarketService;
 
@@ -72,7 +72,7 @@ public class StockPriceController {
             } catch (TooManyApiCallsException e) {
                 model.addAttribute("error", "You used too many api calls in the near past.");
             } catch (InvalidApiCallException e) {
-                logger.save(StockPriceController.class, e);
+                logger.save(StockPricesController.class, e);
 
                 model.addAttribute("error",  e.getMessage() + " Report it to our team if you're able too.");
             }

@@ -3,9 +3,12 @@ package com.trade_analysis.controller;
 import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.dtos_validation.UserSignUpValidationResult;
 import com.trade_analysis.dtos_validation.UserSignUpValidator;
+import com.trade_analysis.exception.EmailVerificationTokenNotFoundException;
 import com.trade_analysis.exception.UserNotFoundException;
+import com.trade_analysis.model.EmailVerificationToken;
 import com.trade_analysis.model.User;
 import com.trade_analysis.service.UserService;
+import com.trade_analysis.util.StringWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.persistence.NonUniqueResultException;
 import java.util.UUID;
 
@@ -79,7 +83,7 @@ public class UserController {
 
     @PreAuthorize(value = "permitAll()")
     @PostMapping(value = "/sign-up")
-    public String signUp(@ModelAttribute UserSignUpDto user, Model model) {
+    public String signUp(@ModelAttribute UserSignUpDto user, Model model) throws MessagingException {
         UserSignUpValidationResult result = UserSignUpValidator.fullValidator.validate(user);
 
         if(!result.isSuccess()) {
@@ -150,6 +154,60 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(null);
 
         return "index";
+    }
+
+    @PreAuthorize(value = "permitAll()")
+    @GetMapping(value = "/email-verification/{tokenId}")
+    public String getEmailVerification(Model model,
+                                       @PathVariable(value = "tokenId") UUID id) throws UserNotFoundException{
+        model.addAttribute("emailAddress", new StringWrapper(""));
+        model.addAttribute("uuid", id);
+
+        try {
+            EmailVerificationToken emailVerificationToken = userService.getEmailVerificationToken(id);
+            UUID userId = emailVerificationToken.getUserId();
+            User user = userService.findUserById(userId);
+
+            model.addAttribute("showForm", true);
+        } catch (EmailVerificationTokenNotFoundException e) {
+            model.addAttribute("showForm", false);
+            model.addAttribute(
+                    "error" ,
+                    "The link is outdated, used, corrupt or wasn't never created.</br>" +
+                            "Sorry but you can't verify your e-mail by this link");
+        }
+
+        return "email-verification";
+    }
+
+    @PreAuthorize(value = "permitAll()")
+    @PostMapping(value = "/email-verification/{tokenId}")
+    public String emailVerification(Model model,
+                                    @PathVariable(value = "tokenId") UUID id,
+                                    @ModelAttribute(value = "emailAddress") StringWrapper emailAddress) throws UserNotFoundException {
+        model.addAttribute("emailAddress", emailAddress);
+        model.addAttribute("uuid", id);
+
+        try {
+            EmailVerificationToken emailVerificationToken = userService.getEmailVerificationToken(id);
+            UUID userId = emailVerificationToken.getUserId();
+            User user = userService.findUserById(userId);
+            model.addAttribute("showForm", true);
+
+            if(!emailAddress.getString().equals(user.getEmail())) {
+                model.addAttribute("error", "This e-mail is invalid. Try again.");
+                return "email-verification";
+            }
+        } catch (EmailVerificationTokenNotFoundException e) {
+            model.addAttribute(
+                    "error" ,
+                    "The link is outdated, used, corrupt or wasn't never created.</br>" +
+                            "Sorry but you can't verify your e-mail by this link.");
+            model.addAttribute("showForm", false);
+        }
+
+        userService.deleteEmailVerificationToken(id);
+        return "email-verified";
     }
 
     private boolean isAuthenticated() {

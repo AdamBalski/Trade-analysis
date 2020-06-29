@@ -2,22 +2,27 @@
 <html lang="en" xmlns:th = "http://www.thymeleaf.com">
 <head>
     <meta charset="UTF-8">
-    <title>You're signed up</title>
+    <title>E-mail verification</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="/image/png" href="img/icon.png">
 
-
+    <style>
+        .text-field {
+            max-width: 500px;
+        }
+		.btn {
+			margin-top: 10px;
+		}
+	</style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel ="stylesheet" href="../css/navbar.css">
     <link rel ="stylesheet" href="../css/main.css">
-    <link rel = "stylesheet" href = "../css/data_style.css">
     <!--	frontend dev-->
     <link rel ="stylesheet" href="../static/css/navbar.css">
     <link rel ="stylesheet" href="../static/css/main.css">
-    <link rel = "stylesheet" href = "../static/css/data_style.css">
     <!--	/ frontend dev-->
 </head>
-<body class="container">
+<body class = "container">
 
 <nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
     <strong class="row col-12">
@@ -25,8 +30,6 @@
         <a class = "navlink col-2" href = "/login">Log in</a>
         <a class = "navlink col-2" href = "/logout">Log out</a>
         <a class = "navlink col-2" href = "/sign-up">Sign up</a>
-        <a class = "navlink col-2" href = "/me">My data</a>
-        <a class = "navlink col-2" href = "/users">Users</a>
     </strong>
 </nav>
 <div class="row col-12">
@@ -36,18 +39,22 @@
     <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
 </div>
 
-<h1>
-    You're successfully signed up, <span th:text="${username}" style="display: inline"> username</span>! <br>
-    Now verify your e-mail address by e-mail we sent you!<br>
-    You are able to access your account now.<br>
-    But at some time between one or two days from now your account will be deleted unless you confirm your e-mail identity.
-</h1>
+<div th:if="${error != null}" th:utext="${error}" class="alert alert-danger" role="alert">
 
+</div>
+
+<form method="POST" th:if="${showForm}" th:action="@{'/email-verification/' + ${uuid}}" th:object="${emailAddress}" class="form-signin">
+    <h2>E-mail verification form.<br>Type your e-mail and then hit &quot;submit&quot;.</h2>
+    <div style="height: 20px;"></div>
+
+    <input type="email" class="form-control text-field" placeholder="E-mail" th:field="*{string}" required>
+    <div style="height: 5px;"></div>
+
+    <input type="submit" class="btn btn-primary" value="Submit">
+</form>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-
 </body>
 </html>

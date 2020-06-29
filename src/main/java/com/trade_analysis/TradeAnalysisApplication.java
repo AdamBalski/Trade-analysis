@@ -1,5 +1,6 @@
 package com.trade_analysis;
 
+import com.trade_analysis.dao.EmailVerificationTokenDbDao;
 import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.logs.Logger;
 import org.springframework.boot.SpringApplication;
@@ -12,19 +13,29 @@ public class TradeAnalysisApplication {
 	public static final String LOGO_LINK = "https://i.imgur.com/TKaIejB.png";
 
 	public static void main(String[] args) {
-		// Start
 		ConfigurableApplicationContext run = SpringApplication.run(TradeAnalysisApplication.class, args);
-		// Logger
-		Logger logger = run.getBean("slf4jLogger", Logger.class);
+		System.out.println();
 
-		// Show all users at the start of the application
-		System.out.print("\n\n\n");
-		logger.info(TradeAnalysisApplication.class, "Show all users\n");
+		Logger logger = getLogger(run);
+		showAllUsers(run, logger);
+		deleteOutdatedTokensWithRelatedUsers(run);
+	}
+
+	private static Logger getLogger(ConfigurableApplicationContext run) {
+		return run.getBean("slf4jLogger", Logger.class);
+	}
+
+	private static void showAllUsers(ConfigurableApplicationContext run, Logger logger) {
+		logger.info(TradeAnalysisApplication.class, "Show all users");
 
 		UserDbDao userDao = run.getBean("userDbDao", UserDbDao.class);
-		userDao.findAll().forEach(System.out::println);
+		userDao.findAll().forEach(user -> logger.info(TradeAnalysisApplication.class, user.toString()));
 
-		System.out.println();
 		logger.info(TradeAnalysisApplication.class, "ending of 'Show all users'\n\n");
+	}
+
+	private static void deleteOutdatedTokensWithRelatedUsers(ConfigurableApplicationContext run) {
+		run.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
+				.deleteOutdatedTokensWithRelatedUsers();
 	}
 }

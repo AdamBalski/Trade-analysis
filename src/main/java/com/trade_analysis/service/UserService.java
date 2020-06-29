@@ -10,7 +10,9 @@ import com.trade_analysis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +27,10 @@ public class UserService {
     @Autowired
     @Qualifier("emailVerificationTokenDbDao")
     private EmailVerificationTokenDbDao emailVerificationTokenDbDao;
+
+    @Autowired
+    @Qualifier("mailSenderService")
+    private MailSenderService mailSenderService;
 
     public User getUserByUsername(String username) throws UserNotFoundException {
         Optional<User> userOptional = userDbDao.getSingleResultByUsername(username);
@@ -48,12 +54,14 @@ public class UserService {
         return userOptional.orElseThrow(UserNotFoundException::new);
     }
 
-    public void signUp(UserSignUpDto userSignUpDto) throws DataIntegrityViolationException {
+    public void signUp(UserSignUpDto userSignUpDto) throws DataIntegrityViolationException, MessagingException {
         User user = User.valueOf(userSignUpDto);
         EmailVerificationToken emailVerificationToken = new EmailVerificationToken(user);
 
         userDbDao.save(user);
         emailVerificationTokenDbDao.save(emailVerificationToken);
+
+        mailSenderService.sendVerificationEmail(emailVerificationToken);
     }
 
     public EmailVerificationToken getEmailVerificationToken(UUID tokenUUID) throws EmailVerificationTokenNotFoundException {
@@ -62,8 +70,15 @@ public class UserService {
         return optional.orElseThrow(EmailVerificationTokenNotFoundException::new);
     }
 
+
     public void deleteEmailVerificationToken(UUID uuid) {
         emailVerificationTokenDbDao.deleteById(uuid);
+    }
+
+    // Every day at midnight
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void deleteOutdatedTokensWithRelatedUsers() {
+        emailVerificationTokenDbDao.deleteOutdatedTokensWithRelatedUsers();
     }
 
     public boolean existsByUsername(String username) {

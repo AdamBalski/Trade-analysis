@@ -177,7 +177,7 @@ public class StockPrices {
     }
 
     @Override
-    public boolean equals(Object o) { // todo test
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StockPrices)) return false;
 

@@ -183,9 +183,6 @@ public class StockPricesTest {
                         "}"
         );
 
-        System.out.println(expected);
-        System.out.println(raw);
-
         assertTrue(expected.similar(stockPrices.getFinalJSON()));
     }
 

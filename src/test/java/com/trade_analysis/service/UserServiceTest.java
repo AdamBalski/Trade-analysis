@@ -5,7 +5,6 @@ import com.trade_analysis.dao.UserDbDao;
 import com.trade_analysis.dtos.UserSignUpDto;
 import com.trade_analysis.exception.EmailVerificationTokenNotFoundException;
 import com.trade_analysis.exception.UserNotFoundException;
-import com.trade_analysis.logs.Logger;
 import com.trade_analysis.model.EmailVerificationToken;
 import com.trade_analysis.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,11 +32,11 @@ public class UserServiceTest {
     UserService userService;
 
     @Mock
-    Logger logger;
-    @Mock
     UserDbDao userDbDao;
     @Mock
     EmailVerificationTokenDbDao emailVerificationTokenDbDao;
+    @Mock
+    MailSenderService mailSenderService;
 
     private List<User> users;
     private UserSignUpDto userSignUpDto;
@@ -47,13 +47,13 @@ public class UserServiceTest {
 
         users = of(
                 new User(UUID.fromString("fd91c269-ab5c-4f8a-907a-e7f044239781"), "username3", "username3@email.com",
-                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "3QP33URO6DL3OPTC", false),
+                        "$2y$10$CS.lGeJ7JyUQdkUl06Gt4uGb1jahebbYvc5EFYDT0BtZ.0uCbtGoy", USUAL, "3QP33URO6DL3OPTC"),
 
                 new User(UUID.fromString("48ee79d6-3350-4ab4-a33f-f176051741e4"), "username4", "username4@email.com",
-                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL, null, true),
+                        "$2y$10$f0D5rrsIjmCfWLLcfi7XP.LERwZyjSfircn9tAj0NWestb.qR6FKS", USUAL, null),
 
                 new User(UUID.fromString("1a0c1f7e-9b6d-44cd-80c2-bb166f29f082"), "username5", "username5@email.com",
-                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN, "EBCXTDAT5J280GRL", true));
+                        "$2y$10$O3wX61NRvWFNaPYhB6xc4euQTzEqAVtl2YVJDFd9d3hB6Y7kWTDue", ADMIN, "EBCXTDAT5J280GRL"));
 
         userSignUpDto = new UserSignUpDto("username", "email@email.com", "password1", "password2");
     }
@@ -141,9 +141,11 @@ public class UserServiceTest {
     }
 
     @Test
-    void testSignUp() {
+    void testSignUp() throws MessagingException {
         userService.signUp(userSignUpDto);
+
         verify(userDbDao).save(any(User.class));
+        verify(mailSenderService).sendVerificationEmail(any(EmailVerificationToken.class));
     }
 
     @Test
@@ -155,6 +157,22 @@ public class UserServiceTest {
         };
 
         assertThrows(DataIntegrityViolationException.class, signUpExecutable);
+    }
+
+    @Test
+    void testSignUpWhenMailSenderServiceThrowsMessagingException() {
+        try {
+            doThrow(MessagingException.class).when(mailSenderService).sendVerificationEmail(any(EmailVerificationToken.class));
+        } catch (MessagingException e) {
+            fail(e);
+            e.printStackTrace();
+        }
+
+        Executable signUpExecutable = () -> {
+            userService.signUp(userSignUpDto);
+        };
+
+        assertThrows(MessagingException.class, signUpExecutable);
     }
 
     @Test
@@ -225,6 +243,12 @@ public class UserServiceTest {
         when(userDbDao.existsByEmail("email@email.email")).thenReturn(false);
 
         assertFalse(userService.existsByEmail("email@email.email"));
+    }
+
+    @Test
+    void testDeleteOutdatedTokensWithRelatedUsers() {
+        userService.deleteOutdatedTokensWithRelatedUsers();
+        verify(emailVerificationTokenDbDao).deleteOutdatedTokensWithRelatedUsers();
     }
 
     @Test

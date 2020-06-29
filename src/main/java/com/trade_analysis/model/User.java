@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.trade_analysis.model.UserRole.USUAL;
@@ -20,7 +21,7 @@ import static com.trade_analysis.model.UserRole.USUAL;
 @Table(name = "user", schema = "public")
 public class User {
     @Id
-    @Column(name = "id", nullable = false, columnDefinition = "uuid")
+    @Column(name = "id", nullable = false, columnDefinition = "uuid", unique = true, updatable = false)
     private UUID id = UUID.randomUUID();
 
     @Column(name = "username", nullable = false, columnDefinition = "varchar(30)")
@@ -39,9 +40,6 @@ public class User {
     @Column(name = "api_key", columnDefinition = "varchar(20)")
     private String apiKey;
 
-    @Column(name = "email_verified", columnDefinition = "boolean")
-    private boolean emailVerified;
-
     public static User valueOf(UserSignUpDto userSignUpDto) {
         String password = new BCryptPasswordEncoder(10).encode(userSignUpDto.getPassword1());
 
@@ -50,8 +48,7 @@ public class User {
                 userSignUpDto.getEmail(),
                 password,
                 USUAL,
-                null,
-                false);
+                null);
     }
 
     public List<GrantedAuthority> getGrantedAuthorities() {
@@ -96,7 +93,7 @@ public class User {
         if (!email.equals(user.email)) return false;
         if (!password.equals(user.password)) return false;
         if (userRole != user.userRole) return false;
-        return apiKey != null ? apiKey.equals(user.apiKey) : user.apiKey == null;
+        return Objects.equals(apiKey, user.apiKey);
     }
 
     @Override
