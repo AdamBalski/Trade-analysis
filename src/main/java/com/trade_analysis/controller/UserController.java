@@ -210,6 +210,12 @@ public class UserController {
         return "email-verified";
     }
 
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @GetMapping(value = "/admin")
+    public String getAdminPage() {
+        return "admin";
+    }
+
     private boolean isAuthenticated() {
         return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
