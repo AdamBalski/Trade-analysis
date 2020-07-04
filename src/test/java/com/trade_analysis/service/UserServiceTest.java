@@ -259,4 +259,10 @@ public class UserServiceTest {
 
         verify(userDbDao).deleteById(id);
     }
+
+    @Test
+    void testUpdateApiKey() {
+        userService.updateApiKey("username", "api_key");
+        verify(userDbDao).updateApiKey("username", "api_key");
+    }
 }

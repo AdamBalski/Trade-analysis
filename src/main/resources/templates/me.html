@@ -6,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="/image/png" href="img/icon.png">
 
-
+    <style>
+        .red {
+            color: red;
+        }
+        .red:hover {
+            color: red;
+        }
+    </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel ="stylesheet" href="../css/navbar.css">
     <link rel ="stylesheet" href="../css/main.css">
@@ -65,9 +72,16 @@
     </div>
 
     <div  class="settings col-12">
-        <a class="row" href="/delete">Delete your account (be sure when you click, you won't be able to restore it)</a>
+        <a class="row" href="/update-api-key" style="margin-left: 40px;">Update an alpha vantage api key (or upload if you haven't yet).</a>
     </div>
 
+    <div class="row col-12">
+        <label class="col-12 red" style="font-size: 30px; margin-left: 20px;">danger</label>
+    </div>
+
+    <div  class="settings col-12">
+        <a class="row red" href="/delete" style="margin-left: 40px;">Delete your account (be sure when you click, you won't be able to restore it).</a>
+    </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

@@ -92,4 +92,8 @@ public class UserService {
     public void deleteUserById(UUID id) {
         userDbDao.deleteById(id);
     }
+
+    public void updateApiKey(String username, String apiKey) {
+        userDbDao.updateApiKey(username, apiKey);
+    }
 }

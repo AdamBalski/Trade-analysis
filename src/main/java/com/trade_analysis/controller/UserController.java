@@ -210,6 +210,23 @@ public class UserController {
         return "email-verified";
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
+    @GetMapping(value = "/update-api-key")
+    public String getUpdateApiKeyPage(Model model) {
+        model.addAttribute("apiKey", new StringWrapper(""));
+
+        return "update-api-key";
+    }
+
+    @PreAuthorize(value = "isAuthenticated()")
+    @PostMapping(value = "/update-api-key")
+    public String updateApiKey(Model model, @ModelAttribute(value = "apiKey") StringWrapper apiKey) {
+        model.addAttribute("apiKey", new StringWrapper(""));
+        userService.updateApiKey(getUsername(), apiKey.getString());
+
+        return "update-api-key";
+    }
+
     @PreAuthorize(value = "hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     @GetMapping(value = "/admin")
     public String getAdminPage() {

@@ -19,6 +19,13 @@ public class TradeAnalysisApplication {
 		Logger logger = getLogger(run);
 		showAllUsers(run, logger);
 		deleteOutdatedTokensWithRelatedUsers(run);
+
+		doSth(run);
+	}
+
+	private static void doSth(ConfigurableApplicationContext run) {
+		UserDbDao userDbDao = run.getBean(UserDbDao.class);
+		userDbDao.updateApiKey("test", "ALPHA_VANTAGE_XD");
 	}
 
 	private static Logger getLogger(ConfigurableApplicationContext run) {

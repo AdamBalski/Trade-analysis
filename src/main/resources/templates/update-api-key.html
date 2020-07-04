@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Update your api key.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="/image/png" href="img/icon.png">
+
+
+    <style>
+        .text-field {
+            max-width: 200px;
+        }
+		.btn {
+			margin-top: 10px;
+		}
+	</style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel ="stylesheet" href="../css/navbar.css">
+    <link rel ="stylesheet" href="../css/main.css">
+</head>
+<body class = "container">
+
+<nav class="navbar navbar-dark bg-dark navbar-expand fixed-top">
+    <strong class="row col-12">
+        <a class = "navlink col-2" href = "/">Main page</a>
+        <a class = "navlink col-2" href = "/me">My data</a>
+        <a class = "navlink col-2" href = "/logout">Log out</a>
+    </strong>
+</nav>
+<div class="row col-12">
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+    <div class="col-6 col-md-6 col-lg-3" style="height: 40px;"></div>
+</div>
+
+<h1 style = "margin-top: 10px;">Update <a href="https://www.alphavantage.co">alpha vantage</a> api key (or upload if you haven't yet).</h1>
+
+<form method="POST" th:action="@{'/update-api-key/'}" th:object="${apiKey}" class="form-signin">
+    <h2>
+        Type your api key and then hit &quot;submit&quot;.<br>
+        Api key is a key that you need to have in order to see your stock prices and analysis.<br>
+        If you don't own an alpha vantage api key, then go to their website <div style="display: inline-block;"><a href="https://www.alphavantage.co/support/#api-key">by this link</a>.</div>
+    </h2>
+    <div style="height: 20px;"></div>
+
+    <input type="text" class="form-control text-field" placeholder="api key" th:field="*{string}" required>
+    <div style="height: 5px;"></div>
+
+    <input type="submit" class="btn btn-primary" value="Submit">
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

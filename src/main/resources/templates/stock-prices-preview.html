@@ -68,8 +68,12 @@
                 <option class="dropdown-menu-button" th:each="symbolOption: ${symbols}" th:value="${symbolOption}" th:text="${symbolOption}"></option>
             </select>
 
-            <button class="form-item" type="submit"> Show </button>
+            <button class="form-item" type="submit">Show</button>
         </form>
+
+        <div class="alert alert-warning row col-12 col-sm-8 col-md-7 col-lg-5" th:if="${stockQueryDto.apiKey.length() == 0}" style="margin: 10px 0 0 0; padding: 10px;" role="alert">
+            If you don't want to type your alpha vantage api key, then go to 'my data' and upload it.
+        </div>
 
         <div class="container-fluid row">
             <span th:text="${info}"></span>
