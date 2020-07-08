@@ -16,3 +16,6 @@ src/main/resources/META-INF
 
 ### Properties (in .gitignore for not showing credentials to database for example) ###
 src/main/resources/*.properties
+
+### Dockerfile (for not updating versions in Dockerfile [LABEL version=???])
+Dockerfile

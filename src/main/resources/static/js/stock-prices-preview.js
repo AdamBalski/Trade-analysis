@@ -14,7 +14,7 @@ function drawChart() {
 }
 
 function drawMainChart() {
-    if(finalJSON == "") return null;
+    if(finalJSON === "") return null;
 
     var data = google.visualization.arrayToDataTable(mainChartArray);
 
@@ -30,7 +30,7 @@ function drawMainChart() {
 }
 
 function drawDerivativesChart() {
-    if(finalJSON == "") return null;
+    if(finalJSON === "") return null;
 
     var data = google.visualization.arrayToDataTable(derivativeChartArray);
 
@@ -47,7 +47,7 @@ function drawDerivativesChart() {
 }
 
 function prepareMainChart() {
-    if(finalJSON == "") return null;
+    if(finalJSON === "") return null;
 
     let chart = [ ['Date', 'Prices'] ];
 
@@ -66,7 +66,7 @@ function prepareMainChart() {
 }
 
 function prepareDerivativesChart() {
-    if(finalJSON == "") return null;
+    if(finalJSON === "") return null;
 
     let chart = [ ['Date', 'Derivatives'] ];
 

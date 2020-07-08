@@ -19,9 +19,4 @@ public class Slf4jLogger implements Logger {
     public void info(Class c, String s) {
         LoggerFactory.getLogger(c).info(s);
     }
-
-    @Override
-    public void emptyLine(Class c) {
-        LoggerFactory.getLogger(c).info("\n");
-    }
 }

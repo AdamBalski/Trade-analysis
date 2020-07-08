@@ -12,37 +12,38 @@ public class TradeAnalysisApplication {
 	public static final String INTERNET_ADDRESS = "http://localhost:8080/";
 	public static final String LOGO_LINK = "https://i.imgur.com/TKaIejB.png";
 
+	private static ConfigurableApplicationContext ctx;
+	private static Logger logger;
+
 	public static void main(String[] args) {
-		ConfigurableApplicationContext run = SpringApplication.run(TradeAnalysisApplication.class, args);
+		ctx = SpringApplication.run(TradeAnalysisApplication.class, args);
+		logger = getLogger();
+
+		postConstruct();
+	}
+
+	private static Logger getLogger() {
+		return ctx.getBean("slf4jLogger", Logger.class);
+	}
+
+	private static void postConstruct() {
 		System.out.println();
 
-		Logger logger = getLogger(run);
-		showAllUsers(run, logger);
-		deleteOutdatedTokensWithRelatedUsers(run);
-
-		doSth(run);
+		showAllUsers();
+		deleteOutdatedTokensWithRelatedUsers();
 	}
 
-	private static void doSth(ConfigurableApplicationContext run) {
-		UserDbDao userDbDao = run.getBean(UserDbDao.class);
-		userDbDao.updateApiKey("test", "ALPHA_VANTAGE_XD");
-	}
-
-	private static Logger getLogger(ConfigurableApplicationContext run) {
-		return run.getBean("slf4jLogger", Logger.class);
-	}
-
-	private static void showAllUsers(ConfigurableApplicationContext run, Logger logger) {
+	private static void showAllUsers() {
 		logger.info(TradeAnalysisApplication.class, "Show all users");
 
-		UserDbDao userDao = run.getBean("userDbDao", UserDbDao.class);
+		UserDbDao userDao = ctx.getBean("userDbDao", UserDbDao.class);
 		userDao.findAll().forEach(user -> logger.info(TradeAnalysisApplication.class, user.toString()));
 
 		logger.info(TradeAnalysisApplication.class, "ending of 'Show all users'\n\n");
 	}
 
-	private static void deleteOutdatedTokensWithRelatedUsers(ConfigurableApplicationContext run) {
-		run.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
+	private static void deleteOutdatedTokensWithRelatedUsers() {
+		ctx.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
 				.deleteOutdatedTokensWithRelatedUsers();
 	}
 }

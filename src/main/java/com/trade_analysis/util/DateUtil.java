@@ -2,6 +2,7 @@ package com.trade_analysis.util;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 
 import static java.time.temporal.ChronoField.*;
 
@@ -20,4 +21,9 @@ public class DateUtil {
             .appendLiteral(' ')
             .append(TIME_FORMATTER)
             .toFormatter();
+
+    public static Date twoWeeksAfterNow() {
+        // 14 days in two weeks * 24 hours in a day * 3600 seconds in an hour * 100 milliseconds in a second
+        return new Date(System.currentTimeMillis() + 14 * 24 * 3600_000);
+    }
 }

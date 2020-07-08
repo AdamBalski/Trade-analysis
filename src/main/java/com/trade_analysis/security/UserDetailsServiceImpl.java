@@ -13,7 +13,7 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     @Qualifier("userDbDao")
-    UserDbDao userDbDao;
+    private UserDbDao userDbDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,7 +1,6 @@
 package com.trade_analysis.security;
 
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,11 +16,8 @@ import org.springframework.stereotype.Component;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public ApplicationSecurityConfiguration() {
-        this.passwordEncoder = new PasswordEncoderFactory().passwordEncoder();
     }
 
     @Bean(value = "userDetailsService")

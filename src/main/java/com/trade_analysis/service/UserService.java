@@ -8,7 +8,6 @@ import com.trade_analysis.exception.UserNotFoundException;
 import com.trade_analysis.model.EmailVerificationToken;
 import com.trade_analysis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -20,17 +19,16 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class UserService {
-    @Autowired
-    @Qualifier("userDbDao")
-    private UserDbDao userDbDao;
+    private final UserDbDao userDbDao;
+    private final EmailVerificationTokenDbDao emailVerificationTokenDbDao;
+    private final MailSenderService mailSenderService;
 
     @Autowired
-    @Qualifier("emailVerificationTokenDbDao")
-    private EmailVerificationTokenDbDao emailVerificationTokenDbDao;
-
-    @Autowired
-    @Qualifier("mailSenderService")
-    private MailSenderService mailSenderService;
+    public UserService(UserDbDao userDbDao, EmailVerificationTokenDbDao emailVerificationTokenDbDao, MailSenderService mailSenderService) {
+        this.userDbDao = userDbDao;
+        this.emailVerificationTokenDbDao = emailVerificationTokenDbDao;
+        this.mailSenderService = mailSenderService;
+    }
 
     public User getUserByUsername(String username) throws UserNotFoundException {
         Optional<User> userOptional = userDbDao.getSingleResultByUsername(username);

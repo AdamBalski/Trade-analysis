@@ -26,10 +26,13 @@ import static com.trade_analysis.dtos_validation.UserSignUpValidationResult.*;
 import static com.trade_analysis.model.UserRole.USUAL;
 
 @Controller
-@SuppressWarnings(value = "unused")
 public class UserController {
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/")
     @PreAuthorize(value = "permitAll()")
@@ -159,14 +162,13 @@ public class UserController {
     @PreAuthorize(value = "permitAll()")
     @GetMapping(value = "/email-verification/{tokenId}")
     public String getEmailVerification(Model model,
-                                       @PathVariable(value = "tokenId") UUID id) throws UserNotFoundException{
+                                       @PathVariable(value = "tokenId") UUID id) {
         model.addAttribute("emailAddress", new StringWrapper(""));
         model.addAttribute("uuid", id);
 
         try {
+            //noinspection unused - It has to be there, because it can throw an exception, so we now if the token exists
             EmailVerificationToken emailVerificationToken = userService.getEmailVerificationToken(id);
-            UUID userId = emailVerificationToken.getUserId();
-            User user = userService.findUserById(userId);
 
             model.addAttribute("showForm", true);
         } catch (EmailVerificationTokenNotFoundException e) {

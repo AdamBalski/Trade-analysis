@@ -32,9 +32,7 @@ public interface UserSignUpValidator extends Validator<UserSignUpDto, UserSignUp
                 SUCCESS : PASSWORD_NOT_CORRECT;
     };
 
-    UserSignUpValidator passwordsShouldBeDifferentValidator = userSignUpDto -> {
-        return userSignUpDto.getPassword1()
-                .equals(userSignUpDto.getPassword2()) ?
+    UserSignUpValidator passwordsShouldBeDifferentValidator = userSignUpDto ->
+            userSignUpDto.getPassword1().equals(userSignUpDto.getPassword2()) ?
                 SUCCESS : PASSWORDS_DIFFERENT;
-    };
 }

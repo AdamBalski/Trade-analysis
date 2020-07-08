@@ -19,7 +19,7 @@ import java.util.UUID;
 @Table(name = "email_verification_token", schema = "public")
 public class EmailVerificationToken {
     @Id
-    @Column(name = "id", nullable = false, columnDefinition = "uuid")
+    @Column(name = "token_id", nullable = false, columnDefinition = "uuid")
     private UUID id = UUID.randomUUID();
 
     @OneToOne(targetEntity = User.class)

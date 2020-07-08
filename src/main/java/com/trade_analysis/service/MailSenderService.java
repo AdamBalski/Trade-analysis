@@ -12,8 +12,12 @@ import javax.mail.internet.MimeMessage;
 
 @Component("mailSenderService")
 public class MailSenderService {
+    private final JavaMailSenderImpl javaMailSender;
+
     @Autowired
-    private JavaMailSenderImpl javaMailSender;
+    public MailSenderService(JavaMailSenderImpl javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendVerificationEmail(EmailVerificationToken token) throws MessagingException {
         String username = token.getUser().getUsername();

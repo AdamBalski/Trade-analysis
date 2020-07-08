@@ -8,13 +8,15 @@ import com.trade_analysis.model.StockPrices;
 import com.trade_analysis.model.StockPricesPeriod;
 import com.trade_analysis.model.StockSymbol;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("stockMarketService")
 public class StockMarketService {
-    @Autowired
-    private StockMarketDao stockMarketDao;
+    private final StockMarketDao stockMarketDao;
+
+    public StockMarketService(StockMarketDao stockMarketDao) {
+        this.stockMarketDao = stockMarketDao;
+    }
 
     public StockPrices getStockPricesFromStockQueryDto(StockQueryDto stockQueryDto) throws InvalidApiCallException, TooManyApiCallsException {
         return new StockPrices(getRawFromStockQueryDto(stockQueryDto));

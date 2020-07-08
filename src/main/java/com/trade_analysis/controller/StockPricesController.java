@@ -14,7 +14,6 @@ import com.trade_analysis.model.User;
 import com.trade_analysis.service.StockMarketService;
 import com.trade_analysis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,15 +27,16 @@ import static java.util.Arrays.asList;
 
 @Controller
 public class StockPricesController {
-    @Autowired
-    StockMarketService stockMarketService;
+    private final StockMarketService stockMarketService;
+    private final UserService userService;
+    private final Logger logger;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    @Qualifier("slf4jLogger")
-    Logger logger;
+    public StockPricesController(Logger logger, StockMarketService stockMarketService, UserService userService) {
+        this.stockMarketService = stockMarketService;
+        this.userService = userService;
+        this.logger = logger;
+    }
 
     @GetMapping(value = "/stocks")
     @PreAuthorize(value = "isAuthenticated()")

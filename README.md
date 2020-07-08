@@ -37,7 +37,6 @@ Also, you have to add a `logger` directory and put a file called `logfile` in it
 #### Done with
 * backend - maven dependencies:
     * check 'pom.xml'
-    * postgres database
 * frontend:
     * bootstrap
     * popper.js
