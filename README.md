@@ -1,9 +1,9 @@
-# Tool for trade analysis
+# Tool for trade analysis in web app
 
 #### Description
 It provides simple analysis of the stock market, but you have to give the alpha vantage api key.
 You can register yourself, so the app will remember you, so you won't have to tell the key every time.
-Also you can see live stock prices of many companies and to do that you don't have to own your api key.
+Also, you can see live stock prices of many companies and to do that you don't have to own your api key.
 
 ---
 #### Prerequisites to run
@@ -31,7 +31,7 @@ spring.mail.password=PASSWORD
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true%     
 ```
-Also you have to add a `logger` directory and put a file called `logfile` in it.
+Also, you have to add a `logger` directory and put a file called `logfile` in it.
 
 ---
 #### Done with

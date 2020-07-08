@@ -1,8 +1,8 @@
 ### Executables ###
-target/
+target
 
-### Logger
-logger/*
+### Logger ###
+logger
 
 ### Maven ###
 mvnw.cmd
@@ -11,12 +11,8 @@ mvnw
 
 ### IntelliJ IDEA ###
 .idea
-*.iws
 *.iml
-*.ipr
+src/main/resources/META-INF
 
-### Properties (credentials to database for example) ###
+### Properties (in .gitignore for not showing credentials to database for example) ###
 src/main/resources/*.properties
-
-### Other things
-frontend-controller.png
