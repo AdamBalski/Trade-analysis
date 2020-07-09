@@ -1,6 +1,6 @@
 FROM openjdk:14-alpine
 
-LABEL version="Here insert VERSION"
+LABEL version="0"
 LABEL description="Tool for trade analysis in web app."
 MAINTAINER "Adam Balski"
 LABEL maintainer="Adam Balski"

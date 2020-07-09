@@ -25,5 +25,5 @@ public interface UserDbDao extends JpaRepository<User, UUID> {
                     "SET api_key = :key " +
                     "WHERE username = :username ;",
             nativeQuery = true)
-    void updateApiKey(@Param(value = "username") String username, @Param(value = "key") String abbpiKey);
+    void updateApiKey(@Param(value = "username") String username, @Param(value = "key") String apiKey);
 }
