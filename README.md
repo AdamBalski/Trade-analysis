@@ -35,6 +35,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true%
 spring.thymeleaf.cache=(!development)
 ```
 Also, you have to add a `logger` directory and put a file called `logfile` in it.
+After that, run create-all-tables.sql script in your postgres db.
 
 ---
 #### Done with
