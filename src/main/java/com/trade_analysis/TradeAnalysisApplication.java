@@ -6,7 +6,10 @@ import com.trade_analysis.logs.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
+@EnableScheduling
 @SpringBootApplication
 public class TradeAnalysisApplication {
 	public static final String INTERNET_ADDRESS = "http://localhost:8080/";
@@ -27,8 +30,6 @@ public class TradeAnalysisApplication {
 	}
 
 	private static void postConstruct() {
-		System.out.println();
-
 		showAllUsers();
 		deleteOutdatedTokensWithRelatedUsers();
 	}
@@ -39,11 +40,16 @@ public class TradeAnalysisApplication {
 		UserDbDao userDao = ctx.getBean("userDbDao", UserDbDao.class);
 		userDao.findAll().forEach(user -> logger.info(TradeAnalysisApplication.class, user.toString()));
 
-		logger.info(TradeAnalysisApplication.class, "ending of 'Show all users'\n\n");
+		logger.info(TradeAnalysisApplication.class, "ending of 'Show all users'");
 	}
 
+	// fixme Everyday at midnight (or when executed)
+	@Scheduled(cron = "0 0 0 * * ?")
 	private static void deleteOutdatedTokensWithRelatedUsers() {
-		ctx.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
+		final int affectedRows = ctx.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
 				.deleteOutdatedTokensWithRelatedUsers();
+
+		logger.info(TradeAnalysisApplication.class,
+				"Deleted outdated email verification tokens with assigned users. Affected rows: " + affectedRows + ".");
 	}
 }

@@ -9,7 +9,6 @@ import com.trade_analysis.model.EmailVerificationToken;
 import com.trade_analysis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -68,15 +67,8 @@ public class UserService {
         return optional.orElseThrow(EmailVerificationTokenNotFoundException::new);
     }
 
-
     public void deleteEmailVerificationToken(UUID uuid) {
         emailVerificationTokenDbDao.deleteById(uuid);
-    }
-
-    // Every day at midnight
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void deleteOutdatedTokensWithRelatedUsers() {
-        emailVerificationTokenDbDao.deleteOutdatedTokensWithRelatedUsers();
     }
 
     public boolean existsByUsername(String username) {

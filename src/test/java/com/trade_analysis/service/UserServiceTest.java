@@ -246,12 +246,6 @@ public class UserServiceTest {
     }
 
     @Test
-    void testDeleteOutdatedTokensWithRelatedUsers() {
-        userService.deleteOutdatedTokensWithRelatedUsers();
-        verify(emailVerificationTokenDbDao).deleteOutdatedTokensWithRelatedUsers();
-    }
-
-    @Test
     void testDeletingUser() {
         UUID id = UUID.randomUUID();
 

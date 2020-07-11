@@ -20,6 +20,6 @@ public class Note {
     @Column(name = "note_id", nullable = false, columnDefinition = "uuid")
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "markdown_text", nullable = false, columnDefinition = "text")
+    @Column(name = "markdown_text", nullable = false, columnDefinition = "varchar(10000)")
     private String text;
 }
