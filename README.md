@@ -30,6 +30,9 @@ spring.mail.username=E-MAIL_ADDRESS
 spring.mail.password=PASSWORD
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true%     
+
+# Thymeleaf
+spring.thymeleaf.cache=(!development)
 ```
 Also, you have to add a `logger` directory and put a file called `logfile` in it.
 

@@ -4,7 +4,10 @@ import com.trade_analysis.exception.InvalidApiCallException;
 import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.util.DateUtil;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.json.JSONObject;
+import org.springframework.security.core.Transient;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,15 +24,17 @@ import static com.trade_analysis.model.StockPricesPeriod.*;
 import static com.trade_analysis.util.DateUtil.DATE_FORMATTER;
 import static java.time.Duration.between;
 
-@Getter
+@Getter @Setter
+@NoArgsConstructor
+@Transient
 public class StockPrices {
-    private final StockSymbol symbol;
-    private final StockPricesPeriod period;
-    private final JSONObject raw;
-    private final JSONObject finalJSON;
-    private final JSONObject metaData;
-    private final JSONObject timeSeries;
-    private final String timeSeriesLabel;
+    private StockSymbol symbol;
+    private StockPricesPeriod period;
+    private JSONObject raw;
+    private JSONObject finalJSON;
+    private JSONObject metaData;
+    private JSONObject timeSeries;
+    private String timeSeriesLabel;
 
     public StockPrices(JSONObject raw) throws InvalidApiCallException, TooManyApiCallsException {
         StockResponseStatus.valueOf(raw).throwException();

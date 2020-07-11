@@ -120,6 +120,13 @@ public class UserController {
         return "sign-up";
     }
 
+    // todo delete before deployment
+    @PreAuthorize(value = "permitAll()")
+    @GetMapping(value = "/signed-up")
+    public String getSignedUpPage() {
+        return "signed-up";
+    }
+
     @PreAuthorize(value = "permitAll()")
     @GetMapping(value = "/login")
     public String getLoginPage(@RequestParam(name = "logout", defaultValue = "false") boolean logout,
@@ -209,6 +216,13 @@ public class UserController {
         }
 
         userService.deleteEmailVerificationToken(id);
+        return "email-verified";
+    }
+
+    // todo delete before deployment
+    @PreAuthorize(value = "permitAll()")
+    @PostMapping(value = "/email-verified")
+    public String getEmailVerifiedPage() {
         return "email-verified";
     }
 
