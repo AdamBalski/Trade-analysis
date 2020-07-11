@@ -43,7 +43,7 @@ public class TradeAnalysisApplication {
 		logger.info(TradeAnalysisApplication.class, "ending of 'Show all users'");
 	}
 
-	// fixme Everyday at midnight (or when executed)
+	// Everyday at midnight (or when executed)
 	@Scheduled(cron = "0 0 0 * * ?")
 	private static void deleteOutdatedTokensWithRelatedUsers() {
 		final int affectedRows = ctx.getBean("emailVerificationTokenDbDao", EmailVerificationTokenDbDao.class)
