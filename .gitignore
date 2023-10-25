@@ -1,3 +1,7 @@
+# tmp
+env.properties
+
+
 ### Executables ###
 target
 
@@ -9,10 +13,8 @@ mvnw.cmd
 mvnw
 .mvn*
 
-### IntelliJ IDEA ###
+### Editors ###
 .idea
+.vim
 *.iml
 src/main/resources/META-INF
-
-### Properties (in .gitignore for not showing credentials to database for example) ###
-src/main/resources/*.properties

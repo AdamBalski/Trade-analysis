@@ -2,6 +2,7 @@ package com.trade_analysis.service;
 
 import com.trade_analysis.dao.StockMarketDao;
 import com.trade_analysis.dtos.StockQueryDto;
+import com.trade_analysis.exception.ApiContainsMetaInformationException;
 import com.trade_analysis.exception.InvalidApiCallException;
 import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.model.StockPrices;
@@ -14,10 +15,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static com.trade_analysis.model.StockSymbol.AMZN;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static com.trade_analysis.model.StockSymbol.MSFT;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -67,7 +69,7 @@ public class StockMarketServiceTest {
             StockPrices actual = stockMarketService.getStockPricesFromStockQueryDto(stockQueryDto);
 
             assertEquals(expected, actual);
-        } catch (InvalidApiCallException | TooManyApiCallsException e) {
+        } catch (InvalidApiCallException | TooManyApiCallsException | ApiContainsMetaInformationException e) {
             fail(e);
             e.printStackTrace();
         }
@@ -82,29 +84,48 @@ public class StockMarketServiceTest {
                 .symbol("AMZN")
                 .build();
 
-        when(stockMarketDao.get5minPeriodStockPrices(apiKey, AMZN)).thenReturn(fiveMinPeriod);
+        try {
+            when(stockMarketDao.get5minPeriodStockPrices(apiKey, AMZN)).thenReturn(fiveMinPeriod);
+            assertEquals(fiveMinPeriod, stockMarketService.getRawFromStockQueryDto(stockQueryDto));
+        } catch (ApiContainsMetaInformationException e) {
+            fail(e);
+        }
 
-        assertEquals(fiveMinPeriod, stockMarketService.getRawFromStockQueryDto(stockQueryDto));
     }
 
     @Test
-    void testGetDailyStockPricesFromLast100Days() {
-        when(stockMarketDao.getDailyStockPricesFromLast100Days("", AMZN)).thenReturn(daily);
-
-        assertEquals(daily, stockMarketDao.getDailyStockPricesFromLast100Days("", AMZN));
+    void testIfDataContainsMetaInfo() {
+        try {
+            when(stockMarketDao.getHourPeriodStockPrices("", MSFT))
+                    .thenReturn(new JSONObject(Map.of("Information", "metaInfo")));
+            StockQueryDto query = StockQueryDto
+                    .builder()
+                    .apiKey("")
+                    .period("HOUR_PERIOD")
+                    .symbol("MSFT")
+                    .build();
+            Exception e = assertThrows(ApiContainsMetaInformationException.class, () -> stockMarketService.getRawFromStockQueryDto(query));
+            assertEquals(e.getMessage(), "metaInfo");
+        } catch(Exception e) {
+            fail(e);
+        }
     }
 
     @Test
-    void testGetHourPeriodStockPrices() {
-        when(stockMarketDao.getHourPeriodStockPrices("", AMZN)).thenReturn(hourPeriod);
-
-        assertEquals(hourPeriod, stockMarketService.getHourPeriodStockPrices("", AMZN));
-    }
-
-    @Test
-    void testGet5minPeriodStockPrices() {
-        when(stockMarketDao.get5minPeriodStockPrices("", AMZN)).thenReturn(fiveMinPeriod);
-
-        assertEquals(fiveMinPeriod, stockMarketService.get5minPeriodStockPrices("", AMZN));
+    void testIfDataContainsNotParseableMetaInfo() {
+        try {
+            when(stockMarketDao.getDailyStockPricesFromLast100Days("", AMZN))
+                    .thenReturn(new JSONObject(Map.of("Information", Map.of("", ""))));
+            StockQueryDto query = StockQueryDto
+                    .builder()
+                    .apiKey("")
+                    .period("DAILY")
+                    .symbol("AMZN")
+                    .build();
+            Exception e = assertThrows(ApiContainsMetaInformationException.class, () -> stockMarketService.getRawFromStockQueryDto(query));
+            assertEquals(e.getMessage(), "CANT_PARSE_API_EXCEPTION");
+        } catch(Exception e) {
+            fail(e);
+        }
     }
 }

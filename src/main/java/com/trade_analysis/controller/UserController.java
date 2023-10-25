@@ -120,7 +120,6 @@ public class UserController {
         return "sign-up";
     }
 
-    // todo delete before deployment
     @PreAuthorize(value = "permitAll()")
     @GetMapping(value = "/signed-up")
     public String getSignedUpPage() {

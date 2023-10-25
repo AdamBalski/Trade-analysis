@@ -2,6 +2,7 @@ package com.trade_analysis.service;
 
 import com.trade_analysis.dao.StockMarketDao;
 import com.trade_analysis.dtos.StockQueryDto;
+import com.trade_analysis.exception.ApiContainsMetaInformationException;
 import com.trade_analysis.exception.InvalidApiCallException;
 import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.model.StockPrices;
@@ -18,31 +19,45 @@ public class StockMarketService {
         this.stockMarketDao = stockMarketDao;
     }
 
-    public StockPrices getStockPricesFromStockQueryDto(StockQueryDto stockQueryDto) throws InvalidApiCallException, TooManyApiCallsException {
+    public StockPrices getStockPricesFromStockQueryDto(StockQueryDto stockQueryDto) throws InvalidApiCallException, TooManyApiCallsException, ApiContainsMetaInformationException {
         return new StockPrices(getRawFromStockQueryDto(stockQueryDto));
     }
 
-    public JSONObject getRawFromStockQueryDto(StockQueryDto stockQueryDto) {
+    public JSONObject getRawFromStockQueryDto(StockQueryDto stockQueryDto) throws ApiContainsMetaInformationException {
         StockPricesPeriod period = StockPricesPeriod.valueOf(stockQueryDto.getPeriod());
         String apiKey = stockQueryDto.getApiKey();
         StockSymbol symbol = StockSymbol.valueOf(stockQueryDto.getSymbol());
 
-        return switch(period) {
+        JSONObject raw =  switch(period) {
             case DAILY -> getDailyStockPricesFromLast100Days(apiKey, symbol);
             case HOUR_PERIOD -> getHourPeriodStockPrices(apiKey, symbol);
             case FIVE_MINUTES_PERIOD -> get5minPeriodStockPrices(apiKey, symbol);
         };
+        // throws ApiContainsMetaInformationException if result contains "Information" key
+        // e.g.: "{"Information": "your api key is not a premium key, but this endpoint is reachable only for premium users"}"
+        return filterIfContainsMetaInformation(raw);
     }
 
-    public JSONObject get5minPeriodStockPrices(String apiKey, StockSymbol symbol) {
+    private JSONObject get5minPeriodStockPrices(String apiKey, StockSymbol symbol) {
         return stockMarketDao.get5minPeriodStockPrices(apiKey, symbol);
     }
 
-    public JSONObject getHourPeriodStockPrices(String apiKey, StockSymbol symbol) {
+    private JSONObject getHourPeriodStockPrices(String apiKey, StockSymbol symbol) {
         return stockMarketDao.getHourPeriodStockPrices(apiKey, symbol);
     }
 
-    public JSONObject getDailyStockPricesFromLast100Days(String apiKey, StockSymbol symbol) {
+    private JSONObject getDailyStockPricesFromLast100Days(String apiKey, StockSymbol symbol) {
         return stockMarketDao.getDailyStockPricesFromLast100Days(apiKey, symbol);
+    }
+
+    private JSONObject filterIfContainsMetaInformation(JSONObject response) throws ApiContainsMetaInformationException {
+        if(response.has("Information")) {
+            Object informationValue = response.get("Information");
+            if(informationValue instanceof String) {
+                throw new ApiContainsMetaInformationException((String) informationValue);
+            }
+            else throw new ApiContainsMetaInformationException();
+        }
+        return response;
     }
 }

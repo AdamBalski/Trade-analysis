@@ -15,7 +15,6 @@ public class StockMarketDao {
         var restTemplate = new RestTemplate();
         var str = restTemplate.getForObject(url, String.class);
 
-
         return new JSONObject(str);
     }
 
@@ -24,7 +23,6 @@ public class StockMarketDao {
         var restTemplate = new RestTemplate();
         var str = restTemplate.getForObject(url, String.class);
 
-
         return new JSONObject(str);
     }
 
@@ -32,7 +30,6 @@ public class StockMarketDao {
         var url = String.format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=%s&outputsize=compact&apikey=%s", symbol.name(), apiKey);
         var restTemplate = new RestTemplate();
         var str = restTemplate.getForObject(url, String.class);
-
 
         return new JSONObject(str);
     }

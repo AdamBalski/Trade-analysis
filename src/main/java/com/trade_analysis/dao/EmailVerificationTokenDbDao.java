@@ -28,5 +28,5 @@ public interface EmailVerificationTokenDbDao extends JpaRepository<EmailVerifica
                     "-- It deletes tokens to, because there is ON DELETE CASCADE on relation",
             nativeQuery = true
     )
-    void deleteOutdatedTokensWithRelatedUsers();
+    int deleteOutdatedTokensWithRelatedUsers();
 }

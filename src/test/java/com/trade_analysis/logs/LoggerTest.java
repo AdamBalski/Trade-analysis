@@ -10,7 +10,15 @@ import static org.mockito.Mockito.*;
 class LoggerTest {
     @Test
     void testInfoWithObject() {
-        Logger logger = mock(Logger.class);
+        Logger logger = mock(new Logger() {
+            @Override
+            public void save(Class c, Exception e) {
+            }
+
+            @Override
+            public void info(Class c, String s) {
+            }
+        }.getClass());
         List<Object> list = of();
 
         doCallRealMethod().when(logger).info(Class.class, list);

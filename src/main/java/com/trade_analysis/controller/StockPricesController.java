@@ -3,6 +3,7 @@ package com.trade_analysis.controller;
 import com.trade_analysis.dtos.StockQueryDto;
 import com.trade_analysis.dtos_validation.StockQueryValidationResult;
 import com.trade_analysis.dtos_validation.StockQueryValidator;
+import com.trade_analysis.exception.ApiContainsMetaInformationException;
 import com.trade_analysis.exception.InvalidApiCallException;
 import com.trade_analysis.exception.TooManyApiCallsException;
 import com.trade_analysis.exception.UserNotFoundException;
@@ -69,6 +70,8 @@ public class StockPricesController {
 
             try {
                 stockPrices = stockMarketService.getStockPricesFromStockQueryDto(stockQueryDto);
+            } catch (ApiContainsMetaInformationException e) {
+                model.addAttribute("error", e.getMessage());
             } catch (TooManyApiCallsException e) {
                 model.addAttribute("error", "You used too many api calls in the near past.");
             } catch (InvalidApiCallException e) {
