@@ -10,5 +10,6 @@ LABEL maintainer="Adam Balski"
 EXPOSE 8080/tcp
 WORKDIR /
 ADD target/*.jar /
+ADD env.properties /
 
-ENTRYPOINT jar -jar *.jar
+ENTRYPOINT /bin/sh -c 'export $(cat /env.properties | xargs); export E_MAIL_PASSWORD=kpvm\ kqym\ mhvo\ ldfh ; java -jar /*.jar'
